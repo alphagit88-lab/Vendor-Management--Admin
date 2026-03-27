@@ -1,24 +1,41 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { Users, Store, Package, Activity, ArrowUpRight, TrendingUp } from 'lucide-react';
+import { Users, Store, Package, Activity, ArrowUpRight, TrendingUp, ShoppingCart } from 'lucide-react';
 
 export default function DashboardPage() {
-  const [stats, setStats] = useState({ users: 0, shops: 0, items: 0 });
+  const [stats, setStats] = useState<any>({ 
+    users: { value: 0, change: '0%' }, 
+    shops: { value: 0, change: '0%' }, 
+    items: { value: 0, change: '0%' }, 
+    orders: { value: 0, change: '0%' } 
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // In production, fetch these from /api/stats
-    setTimeout(() => {
-      setStats({ users: 12, shops: 24, items: 156 });
-      setLoading(false);
-    }, 600);
+    const fetchStats = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/dashboard/stats`, {
+          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        const data = await res.json();
+        if (data.success) {
+          setStats(data.data);
+        }
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
   }, []);
 
   const statCards = [
-    { name: 'Active Staff', value: stats.users, icon: Users, change: '+12%', color: 'from-blue-500 to-indigo-600', bg: 'bg-indigo-50/50' },
-    { name: 'Registered Shops', value: stats.shops, icon: Store, change: '+4.5%', color: 'from-emerald-400 to-teal-500', bg: 'bg-emerald-50/50' },
-    { name: 'Available Items', value: stats.items, icon: Package, change: '+23.1%', color: 'from-amber-400 to-orange-500', bg: 'bg-orange-50/50' },
+    { name: 'Active Staff', value: stats.users.value, icon: Users, change: stats.users.change, color: 'from-blue-500 to-indigo-600', bg: 'bg-indigo-50/50' },
+    { name: 'Registered Shops', value: stats.shops.value, icon: Store, change: stats.shops.change, color: 'from-emerald-400 to-teal-500', bg: 'bg-emerald-50/50' },
+    { name: 'Available Items', value: stats.items.value, icon: Package, change: stats.items.change, color: 'from-amber-400 to-orange-500', bg: 'bg-orange-50/50' },
+    { name: 'Total Orders', value: stats.orders.value, icon: ShoppingCart, change: stats.orders.change, color: 'from-fuchsia-400 to-purple-600', bg: 'bg-fuchsia-50/50' },
   ];
 
   return (
@@ -34,7 +51,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat, idx) => (
           <div key={idx} className={`relative overflow-hidden bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 hover:shadow-lg hover:-translate-y-1`}>
             <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.color} opacity-[0.03] rounded-bl-full -z-10`} />
