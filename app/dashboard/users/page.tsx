@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { Plus, UserPlus, Search, MoreVertical, X } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
@@ -10,7 +11,7 @@ export default function UsersPage() {
 
   const fetchUsers = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/users', {
+      const res = await fetch(`${API_URL}/users`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       const data = await res.json();
@@ -30,7 +31,7 @@ export default function UsersPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/users', {
+      const res = await fetch(`${API_URL}/users`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

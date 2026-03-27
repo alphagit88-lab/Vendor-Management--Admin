@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { Plus, Package, Edit, Trash2, X, Search, MoreVertical, Layers } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 export default function ItemsPage() {
   const [items, setItems] = useState<any[]>([]);
@@ -10,7 +11,7 @@ export default function ItemsPage() {
 
   const fetchItems = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/items', {
+      const res = await fetch(`${API_URL}/items`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       const data = await res.json();
@@ -30,7 +31,7 @@ export default function ItemsPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/items', {
+      const res = await fetch(`${API_URL}/items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

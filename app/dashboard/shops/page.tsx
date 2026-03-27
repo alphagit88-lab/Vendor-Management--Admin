@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { Plus, Store, Search, MoreVertical, X, MapPin, Phone } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 export default function ShopsPage() {
   const [shops, setShops] = useState<any[]>([]);
@@ -10,7 +11,7 @@ export default function ShopsPage() {
 
   const fetchShops = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/shops', {
+      const res = await fetch(`${API_URL}/shops`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       const data = await res.json();
@@ -30,7 +31,7 @@ export default function ShopsPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/shops', {
+      const res = await fetch(`${API_URL}/shops`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

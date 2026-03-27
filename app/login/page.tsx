@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { ArrowRight, Lock, Phone } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 export default function Login() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function Login() {
     setError('');
     
     try {
-      const res = await fetch('http://localhost:5000/api/auth/login', {
+      const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ phone, password })
