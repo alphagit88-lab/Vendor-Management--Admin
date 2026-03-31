@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { LayoutDashboard, Users, Store, Package, LogOut, ChevronRight, UserCircle, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, Users, Store, Package, LogOut, ChevronRight, UserCircle, ShoppingCart, Boxes, ClipboardList } from 'lucide-react';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -30,9 +30,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'User Management', href: '/dashboard/users', icon: Users },
-    { name: 'Shops', href: '/dashboard/shops', icon: Store },
+    { name: 'Customers', href: '/dashboard/customers', icon: Store },
     { name: 'Items', href: '/dashboard/items', icon: Package },
+    { name: 'Inventory Management', href: '/dashboard/inventory', icon: Boxes },
     { name: 'Distribution Orders', href: '/dashboard/orders', icon: ShoppingCart },
+    { name: 'Reports', href: '/dashboard/reports', icon: ClipboardList },
   ];
 
   return (
