@@ -9,7 +9,7 @@ export default function ItemsPage() {
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ 
     description_name: '', price: '', description: '', 
-    item_number: '', upc: '', cost: '', quantity_size: '' 
+    item_number: '', upc: '', cost: '', quantity_size: '', vendor_cost: '' 
   });
   const [loading, setLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
@@ -57,7 +57,7 @@ export default function ItemsPage() {
         setShowModal(false);
         setFormData({ 
           description_name: '', price: '', description: '', 
-          item_number: '', upc: '', cost: '', quantity_size: '' 
+          item_number: '', upc: '', cost: '', quantity_size: '', vendor_cost: '' 
         });
         setIsEdit(false);
         setEditId(null);
@@ -79,7 +79,8 @@ export default function ItemsPage() {
       item_number: item.item_number || '',
       upc: item.upc || '',
       cost: item.cost || '',
-      quantity_size: item.quantity_size || ''
+      quantity_size: item.quantity_size || '',
+      vendor_cost: item.vendor_cost || ''
     });
     setEditId(item.id);
     setIsEdit(true);
@@ -129,7 +130,7 @@ export default function ItemsPage() {
             setEditId(null);
             setFormData({ 
               description_name: '', price: '', description: '', 
-              item_number: '', upc: '', cost: '', quantity_size: '' 
+              item_number: '', upc: '', cost: '', quantity_size: '', vendor_cost: '' 
             });
             setShowModal(true);
           }}
@@ -159,7 +160,8 @@ export default function ItemsPage() {
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Description</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Item #</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Size / Qty</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Cost</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Unit Cost</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Vendor Cost</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">SRP</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right">Actions</th>
               </tr>
@@ -180,7 +182,10 @@ export default function ItemsPage() {
                     <span className="text-xs text-gray-500 font-medium">{i.quantity_size || '—'}</span>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap">
-                    <span className="text-sm font-medium text-red-500">$ {parseFloat(i.cost || 0).toFixed(2)}</span>
+                    <span className="text-sm font-medium text-gray-500">$ {parseFloat(i.cost || 0).toFixed(2)}</span>
+                  </td>
+                  <td className="px-6 py-3 whitespace-nowrap">
+                    <span className="text-sm font-medium text-red-500">$ {parseFloat(i.vendor_cost || 0).toFixed(2)}</span>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap">
                     <span className="text-sm font-bold text-emerald-600">$ {parseFloat(i.price).toFixed(2)}</span>
@@ -270,13 +275,21 @@ export default function ItemsPage() {
                     <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm font-mono" placeholder="000000000000"
                       value={formData.upc} onChange={e => setFormData({ ...formData, upc: e.target.value })} />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Unit Cost (Puchase)</label>
+                      <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Unit Cost</label>
                       <div className="relative">
                         <span className="absolute left-3 top-2.5 text-gray-400 text-sm">$</span>
                         <input type="number" step="0.01" className="w-full pl-7 pr-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="0.00"
                           value={formData.cost} onChange={e => setFormData({ ...formData, cost: e.target.value })} />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Vendor Cost</label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-2.5 text-gray-400 text-sm">$</span>
+                        <input type="number" step="0.01" className="w-full pl-7 pr-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="0.00"
+                          value={formData.vendor_cost} onChange={e => setFormData({ ...formData, vendor_cost: e.target.value })} />
                       </div>
                     </div>
                     <div>
