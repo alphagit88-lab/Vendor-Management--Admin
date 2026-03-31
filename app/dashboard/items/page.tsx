@@ -7,7 +7,10 @@ import ConfirmModal from '@/components/ConfirmModal';
 export default function ItemsPage() {
   const [items, setItems] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ name: '', price: '', description: '', sku: '', upc: '' });
+  const [formData, setFormData] = useState({ 
+    description_name: '', price: '', description: '', 
+    item_number: '', upc: '', cost: '', quantity_size: '' 
+  });
   const [loading, setLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
@@ -52,7 +55,10 @@ export default function ItemsPage() {
       if (data.success) {
         fetchItems();
         setShowModal(false);
-        setFormData({ name: '', price: '', description: '', sku: '', upc: '' });
+        setFormData({ 
+          description_name: '', price: '', description: '', 
+          item_number: '', upc: '', cost: '', quantity_size: '' 
+        });
         setIsEdit(false);
         setEditId(null);
       } else {
@@ -67,11 +73,13 @@ export default function ItemsPage() {
 
   const handleEdit = (item: any) => {
     setFormData({
-      name: item.name || '',
+      description_name: item.description_name || '',
       price: item.price || '',
       description: item.description || '',
-      sku: item.sku || '',
-      upc: item.upc || ''
+      item_number: item.item_number || '',
+      upc: item.upc || '',
+      cost: item.cost || '',
+      quantity_size: item.quantity_size || ''
     });
     setEditId(item.id);
     setIsEdit(true);
@@ -119,7 +127,10 @@ export default function ItemsPage() {
           onClick={() => {
             setIsEdit(false);
             setEditId(null);
-            setFormData({ name: '', price: '', description: '', sku: '', upc: '' });
+            setFormData({ 
+              description_name: '', price: '', description: '', 
+              item_number: '', upc: '', cost: '', quantity_size: '' 
+            });
             setShowModal(true);
           }}
           className="bg-orange-500 shadow-sm shadow-orange-200 text-white flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm hover:bg-orange-600 transition-all font-medium"
@@ -145,33 +156,34 @@ export default function ItemsPage() {
           <table className="w-full min-w-[800px] text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Item Name</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Internal SKU</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Global UPC</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Unit Rate</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">System Attributes</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right">Modifiers</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Description</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Item #</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Size / Qty</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Cost</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">SRP</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
               {items.map(i => (
                 <tr key={i.id} className="hover:bg-gray-50/80 transition-colors group">
                   <td className="px-6 py-3 whitespace-nowrap">
-                    <span className="text-sm font-semibold text-gray-900">{i.name}</span>
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold text-gray-900">{i.description_name}</span>
+                      <span className="text-[10px] text-gray-400 font-mono tracking-wider">UPC: {i.upc || '—'}</span>
+                    </div>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap">
-                    <span className="text-[11px] text-gray-700 font-mono font-bold tracking-wider">{i.sku || `ID-${i.id.toString().padStart(6, '0')}`}</span>
+                    <span className="text-[11px] text-gray-700 font-mono font-bold tracking-wider">{i.item_number}</span>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap">
-                    <span className="text-[10px] text-gray-400 font-mono tracking-wider">{i.upc || 'NO-UPC'}</span>
+                    <span className="text-xs text-gray-500 font-medium">{i.quantity_size || '—'}</span>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap">
-                    <span className="text-sm font-bold text-gray-900">$ {parseFloat(i.price).toFixed(2)}</span>
+                    <span className="text-sm font-medium text-red-500">$ {parseFloat(i.cost || 0).toFixed(2)}</span>
                   </td>
-                  <td className="px-6 py-3">
-                    <p className="text-sm text-gray-600 line-clamp-1">
-                      {i.description || '—'}
-                    </p>
+                  <td className="px-6 py-3 whitespace-nowrap">
+                    <span className="text-sm font-bold text-emerald-600">$ {parseFloat(i.price).toFixed(2)}</span>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap text-right">
                     <div className="flex items-center justify-end gap-1">
@@ -215,7 +227,7 @@ export default function ItemsPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => setShowModal(false)} />
-          <div className="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
             <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
@@ -231,37 +243,56 @@ export default function ItemsPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6 flex-1 overflow-y-auto">
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2 tracking-tight">Standard Nomenclature</label>
-                  <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200 rounded-xl transition" placeholder="e.g. Standard Processing Unit (Type B)" required
-                    value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2 tracking-tight">Market Rate (USD)</label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <span className="text-slate-400 font-medium">$</span>
-                    </div>
-                    <input type="number" step="0.01" className="w-full pl-8 pr-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200 rounded-xl transition font-mono" placeholder="0.00" required
-                      value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
-                  </div>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Product Description</h3>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2 tracking-tight">Internal SKU</label>
-                    <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200 rounded-xl transition" placeholder="e.g. 53014"
-                      value={formData.sku} onChange={e => setFormData({ ...formData, sku: e.target.value })} />
+                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Standard Nomenclature / Description</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="e.g. Premium Lager" required
+                      value={formData.description_name} onChange={e => setFormData({ ...formData, description_name: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2 tracking-tight">Global UPC</label>
-                    <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200 rounded-xl transition" placeholder="e.g. 080660957159"
+                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Quantity and Size</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="ex: 12 pack 16 oz"
+                      value={formData.quantity_size} onChange={e => setFormData({ ...formData, quantity_size: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Item Number (Internal)</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="Item #"
+                      value={formData.item_number} onChange={e => setFormData({ ...formData, item_number: e.target.value })} />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Identifiers & Logistics</h3>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Global UPC</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm font-mono" placeholder="000000000000"
                       value={formData.upc} onChange={e => setFormData({ ...formData, upc: e.target.value })} />
                   </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Unit Cost (Puchase)</label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-2.5 text-gray-400 text-sm">$</span>
+                        <input type="number" step="0.01" className="w-full pl-7 pr-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="0.00"
+                          value={formData.cost} onChange={e => setFormData({ ...formData, cost: e.target.value })} />
+                      </div>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Selling Price (SRP)</label>
+                      <div className="relative">
+                        <span className="absolute left-3 top-2.5 text-gray-400 text-sm">$</span>
+                        <input type="number" step="0.01" className="w-full pl-7 pr-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="0.00" required
+                          value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2 tracking-tight">System Object Parameters (Optional)</label>
-                  <textarea className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-orange-500 focus:ring-2 focus:ring-orange-200 rounded-xl transition resize-none h-28 text-sm" placeholder="Define weight matrices, compliance codes, or routing parameters..."
+
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Additional System Parameters (Optional)</label>
+                  <textarea className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition resize-none h-20 text-sm" placeholder="Detailed product specifications..."
                     value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
                 </div>
               </div>

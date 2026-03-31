@@ -7,7 +7,11 @@ import ConfirmModal from '@/components/ConfirmModal';
 export default function ShopsPage() {
   const [shops, setShops] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ name: '', address: '', contact: '', account_id: '', permit_numbers: '' });
+  const [formData, setFormData] = useState({
+    name: '', address: '', phone: '', account_id: '', permit_numbers: '',
+    registered_company_name: '', dba: '', email: '', sales_tax_id: '',
+    has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD'
+  });
   const [loading, setLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
@@ -39,7 +43,7 @@ export default function ShopsPage() {
     try {
       const url = isEdit ? `${API_URL}/shops/${editId}` : `${API_URL}/shops`;
       const method = isEdit ? 'PUT' : 'POST';
-      
+
       const res = await fetch(url, {
         method,
         headers: {
@@ -52,7 +56,11 @@ export default function ShopsPage() {
       if (data.success) {
         fetchShops();
         setShowModal(false);
-        setFormData({ name: '', address: '', contact: '', account_id: '', permit_numbers: '' });
+        setFormData({
+          name: '', address: '', phone: '', account_id: '', permit_numbers: '',
+          registered_company_name: '', dba: '', email: '', sales_tax_id: '',
+          has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD'
+        });
         setIsEdit(false);
         setEditId(null);
       } else {
@@ -69,9 +77,17 @@ export default function ShopsPage() {
     setFormData({
       name: shop.name || '',
       address: shop.address || '',
-      contact: shop.contact || '',
+      phone: shop.phone || '',
       account_id: shop.account_id || '',
-      permit_numbers: shop.permit_numbers || ''
+      permit_numbers: shop.permit_numbers || '',
+      registered_company_name: shop.registered_company_name || '',
+      dba: shop.dba || '',
+      email: shop.email || '',
+      sales_tax_id: shop.sales_tax_id || '',
+      has_cigarette_permit: shop.has_cigarette_permit || false,
+      tobacco_permit_number: shop.tobacco_permit_number || '',
+      tobacco_expire_date: shop.tobacco_expire_date ? new Date(shop.tobacco_expire_date).toISOString().split('T')[0] : '',
+      payment_type: shop.payment_type || 'COD'
     });
     setEditId(shop.id);
     setIsEdit(true);
@@ -119,7 +135,11 @@ export default function ShopsPage() {
           onClick={() => {
             setIsEdit(false);
             setEditId(null);
-            setFormData({ name: '', address: '', contact: '', account_id: '', permit_numbers: '' });
+            setFormData({
+              name: '', address: '', phone: '', account_id: '', permit_numbers: '',
+              registered_company_name: '', dba: '', email: '', sales_tax_id: '',
+              has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD'
+            });
             setShowModal(true);
           }}
           className="bg-emerald-600 shadow-sm shadow-emerald-200 text-white flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm hover:bg-emerald-700 transition-all font-medium"
@@ -145,12 +165,11 @@ export default function ShopsPage() {
           <table className="w-full min-w-[800px] text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Branch Name</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Internal Name</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Account #</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Physical Address</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Contact Line</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Permits</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right">Actions</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">DBA / Company</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Tax ID</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
@@ -160,31 +179,27 @@ export default function ShopsPage() {
                     <span className="text-sm font-semibold text-gray-900">{s.name}</span>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap">
-                    <span className="text-[11px] text-gray-500 font-mono tracking-wider">{s.account_id || `ID-${s.id.toString().padStart(6, '0')}`}</span>
-                  </td>
-                  <td className="px-6 py-3">
-                    <p className="text-sm text-gray-600 line-clamp-1">{s.address}</p>
+                    <span className="text-[11px] text-gray-500 font-mono tracking-wider">{s.account_id}</span>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap">
-                    {s.contact ? (
-                      <span className="text-sm text-gray-700 font-medium">{s.contact}</span>
-                    ) : (
-                      <span className="text-sm text-gray-400 italic">No contact</span>
-                    )}
+                    <div className="flex flex-col">
+                      <span className="text-sm font-bold text-gray-900">{s.dba || '—'}</span>
+                      <span className="text-xs text-gray-500">{s.registered_company_name || '—'}</span>
+                    </div>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap">
-                    <span className="text-xs text-slate-500 font-medium">{s.permit_numbers || '—'}</span>
+                    <span className="text-sm text-gray-600 font-mono">{s.sales_tax_id || '—'}</span>
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button 
+                      <button
                         onClick={() => handleEdit(s)}
                         className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all"
                         title="Edit Parameters"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
-                      <button 
+                      <button
                         onClick={() => handleDelete(s.id)}
                         className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-all"
                         title="Decommission Branch"
@@ -217,7 +232,7 @@ export default function ShopsPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => setShowModal(false)} />
-          <div className="bg-white rounded-3xl w-full max-w-lg max-h-[90vh] shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
             <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white">
               <h2 className="text-2xl font-bold tracking-tight text-slate-900">
                 {isEdit ? 'Modify Branch Parameters' : 'Configure New Branch'}
@@ -228,33 +243,96 @@ export default function ShopsPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6 flex-1 overflow-y-auto">
-              <div className="space-y-5">
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Branch Classification Name</label>
-                  <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-xl transition" placeholder="e.g. Downtown Central" required
-                    value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
-                </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Physical Location</label>
-                  <textarea className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-xl transition resize-none h-28" placeholder="Enter complete physical address..." required
-                    value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Business Identity</h3>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Internal Account #</label>
-                    <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-xl transition" placeholder="e.g. 61506"
-                      value={formData.account_id} onChange={e => setFormData({ ...formData, account_id: e.target.value })} />
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Internal System Name</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="e.g. Downtown Central" required
+                      value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Direct Terminal Line</label>
-                    <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-xl transition" placeholder="(555) 123-4567"
-                      value={formData.contact} onChange={e => setFormData({ ...formData, contact: e.target.value })} />
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Registered Company Name</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="Legal Entity Name"
+                      value={formData.registered_company_name} onChange={e => setFormData({ ...formData, registered_company_name: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">DBA (Doing Business As)</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="Store Front Name"
+                      value={formData.dba} onChange={e => setFormData({ ...formData, dba: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Account Number</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-100 border border-gray-100 text-gray-500 rounded-xl text-sm" placeholder="Automatically Generated" disabled
+                      value={formData.account_id} />
+                    <p className="text-[10px] text-amber-600 mt-1 font-medium italic">Auto-generated</p>
                   </div>
                 </div>
-                <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Regulatory Permits (TABC etc.)</label>
-                  <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 rounded-xl transition" placeholder="e.g. W 820091, BC 820093"
-                    value={formData.permit_numbers} onChange={e => setFormData({ ...formData, permit_numbers: e.target.value })} />
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Contact & Location</h3>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Physical Address</label>
+                    <textarea className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition resize-none h-20 text-sm" placeholder="Enter complete address..." required
+                      value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Email Address</label>
+                    <input type="email" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="contact@shop.com"
+                      value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Phone Number</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="(555) 000-0000"
+                      value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Compliance & Finance</h3>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Sales Tax ID</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="Tax Identification Number"
+                      value={formData.sales_tax_id} onChange={e => setFormData({ ...formData, sales_tax_id: e.target.value })} />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Payment Type</label>
+                    <select className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm"
+                      value={formData.payment_type} onChange={e => setFormData({ ...formData, payment_type: e.target.value })}>
+                      <option value="COD">COD (Cash on Delivery)</option>
+                      <option value="EFT">EFT (Electronic Funds Transfer)</option>
+                    </select>
+                  </div>
+                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
+                    <div className="flex items-center gap-3 mb-3">
+                      <input type="checkbox" id="tobacco" className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500"
+                        checked={formData.has_cigarette_permit} onChange={e => setFormData({ ...formData, has_cigarette_permit: e.target.checked })} />
+                      <label htmlFor="tobacco" className="text-sm font-bold text-slate-700 cursor-pointer">Cigarette / Tobacco Permit</label>
+                    </div>
+                    {formData.has_cigarette_permit && (
+                      <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Permit Number</label>
+                          <input type="text" className="w-full px-3 py-2 bg-white border border-gray-100 focus:border-emerald-500 rounded-lg text-sm" placeholder="Permit #"
+                            value={formData.tobacco_permit_number} onChange={e => setFormData({ ...formData, tobacco_permit_number: e.target.value })} />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Expiry Date</label>
+                          <input type="date" className="w-full px-3 py-2 bg-white border border-gray-100 focus:border-emerald-500 rounded-lg text-sm"
+                            value={formData.tobacco_expire_date} onChange={e => setFormData({ ...formData, tobacco_expire_date: e.target.value })} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Additional Meta</h3>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">General Permit Notes</label>
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="Other permits or regulatory info"
+                      value={formData.permit_numbers} onChange={e => setFormData({ ...formData, permit_numbers: e.target.value })} />
+                  </div>
                 </div>
               </div>
               <div className="pt-6 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
@@ -268,7 +346,7 @@ export default function ShopsPage() {
         </div>
       )}
 
-      <ConfirmModal 
+      <ConfirmModal
         isOpen={showDeleteConfirm}
         onClose={() => setShowDeleteConfirm(false)}
         onConfirm={confirmDelete}
