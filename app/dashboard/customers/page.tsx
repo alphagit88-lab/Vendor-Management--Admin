@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Plus, Users, Search, Edit, Trash2, X, MapPin, Phone } from 'lucide-react';
+import { Plus, Users, Search, Edit, Trash2, X, MapPin, Phone, Building2 } from 'lucide-react';
 import { API_URL } from '@/lib/config';
 import ConfirmModal from '@/components/ConfirmModal';
 
@@ -12,7 +12,8 @@ export default function CustomersPage() {
     registered_company_name: '', dba: '', email: '', sales_tax_id: '',
     has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD'
   });
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -30,6 +31,8 @@ export default function CustomersPage() {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -39,7 +42,7 @@ export default function CustomersPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitting(true);
     try {
       const url = isEdit ? `${API_URL}/customers/${editId}` : `${API_URL}/customers`;
       const method = isEdit ? 'PUT' : 'POST';
@@ -69,7 +72,7 @@ export default function CustomersPage() {
     } catch (err) {
       alert(isEdit ? "Error updating customer" : "Error adding customer");
     } finally {
-      setLoading(false);
+      setSubmitting(false);
     }
   };
 
@@ -100,7 +103,7 @@ export default function CustomersPage() {
 
   const confirmDelete = async () => {
     if (!deleteId) return;
-    isDeleting ? null : setIsDeleting(true);
+    setIsDeleting(true);
     try {
       const res = await fetch(`${API_URL}/customers/${deleteId}`, {
         method: 'DELETE',
@@ -122,6 +125,30 @@ export default function CustomersPage() {
       setIsDeleting(false);
     }
   };
+
+  if (loading && customers.length === 0) {
+    return (
+      <div className="p-8 animate-in fade-in duration-700 max-w-[1600px] mx-auto">
+        <div className="flex justify-between items-center mb-12 gap-6">
+          <div className="space-y-3">
+            <div className="h-10 w-64 bg-slate-100 rounded-2xl animate-pulse" />
+            <div className="h-4 w-48 bg-slate-50 rounded-xl animate-pulse" />
+          </div>
+          <div className="h-12 w-48 bg-emerald-50 border border-emerald-100 rounded-xl animate-pulse" />
+        </div>
+        
+        <div className="bg-white rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden">
+          <div className="p-24 flex flex-col items-center justify-center space-y-6">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-slate-50 border-t-emerald-600 rounded-full animate-spin" />
+              <Building2 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-emerald-400 animate-pulse" />
+            </div>
+            <p className="text-sm font-black text-slate-300 uppercase tracking-[0.2em]">Retrieving Retailer Accounts...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -155,7 +182,7 @@ export default function CustomersPage() {
             <input
               type="text"
               placeholder="Search customers..."
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-shadow"
+              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500/50 transition-shadow outline-none"
             />
           </div>
         </div>
@@ -167,7 +194,7 @@ export default function CustomersPage() {
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Account #</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">DBA / Company</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Tax ID</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left text-right">Actions</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
@@ -189,14 +216,14 @@ export default function CustomersPage() {
                     <div className="flex items-center justify-end gap-1">
                       <button
                         onClick={() => handleEdit(c)}
-                        className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all"
+                        className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all font-medium"
                         title="Edit Details"
                       >
                         <Edit className="w-4 h-4" />
                       </button>
                       <button
                         onClick={() => handleDelete(c.id)}
-                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
                         title="Delete Customer"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -208,7 +235,7 @@ export default function CustomersPage() {
             </tbody>
           </table>
 
-          {customers.length === 0 && (
+          {customers.length === 0 && !loading && (
             <div className="p-16 text-center flex flex-col items-center">
               <Users className="w-12 h-12 text-slate-300 mb-4" />
               <h3 className="text-lg font-bold text-slate-900">No active customers</h3>
@@ -243,12 +270,12 @@ export default function CustomersPage() {
                   <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Business Identity</h3>
                   <div>
                     <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Registered Company Name</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="Legal Entity Name"
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="Legal Entity Name"
                       value={formData.registered_company_name} onChange={e => setFormData({ ...formData, registered_company_name: e.target.value })} />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">DBA (Doing Business As)</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="Store Front Name"
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="Store Front Name"
                       value={formData.dba} onChange={e => setFormData({ ...formData, dba: e.target.value })} />
                   </div>
                   <div>
@@ -263,17 +290,17 @@ export default function CustomersPage() {
                   <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Contact & Location</h3>
                   <div>
                     <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Physical Address</label>
-                    <textarea className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition resize-none h-20 text-sm" placeholder="Enter complete address..." required
+                    <textarea className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition resize-none h-20 text-sm font-medium outline-none" placeholder="Enter complete address..." required
                       value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Email Address</label>
-                    <input type="email" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="contact@customer.com"
+                    <input type="email" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="contact@customer.com"
                       value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Phone Number</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="(555) 000-0000"
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="(555) 000-0000"
                       value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
                   </div>
                 </div>
@@ -282,12 +309,12 @@ export default function CustomersPage() {
                   <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Compliance & Finance</h3>
                   <div>
                     <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Sales Tax ID</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="Tax Identification Number"
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-mono outline-none" placeholder="Tax Identification Number"
                       value={formData.sales_tax_id} onChange={e => setFormData({ ...formData, sales_tax_id: e.target.value })} />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Payment Type</label>
-                    <select className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm"
+                    <select className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-bold outline-none"
                       value={formData.payment_type} onChange={e => setFormData({ ...formData, payment_type: e.target.value })}>
                       <option value="COD">COD (Cash on Delivery)</option>
                       <option value="EFT">EFT (Electronic Funds Transfer)</option>
@@ -303,12 +330,12 @@ export default function CustomersPage() {
                       <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
                         <div>
                           <label className="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Permit Number</label>
-                          <input type="text" className="w-full px-3 py-2 bg-white border border-gray-100 focus:border-emerald-500 rounded-lg text-sm" placeholder="Permit #"
+                          <input type="text" className="w-full px-3 py-2 bg-white border border-gray-100 focus:border-emerald-500 rounded-lg text-sm font-medium outline-none" placeholder="Permit #"
                             value={formData.tobacco_permit_number} onChange={e => setFormData({ ...formData, tobacco_permit_number: e.target.value })} />
                         </div>
                         <div>
                           <label className="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Expiry Date</label>
-                          <input type="date" className="w-full px-3 py-2 bg-white border border-gray-100 focus:border-emerald-500 rounded-lg text-sm"
+                          <input type="date" className="w-full px-3 py-2 bg-white border border-gray-100 focus:border-emerald-500 rounded-lg text-sm font-medium outline-none"
                             value={formData.tobacco_expire_date} onChange={e => setFormData({ ...formData, tobacco_expire_date: e.target.value })} />
                         </div>
                       </div>
@@ -320,15 +347,15 @@ export default function CustomersPage() {
                   <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Additional Meta</h3>
                   <div>
                     <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">General Permit Notes</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm" placeholder="Other permits or regulatory info"
+                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="Other permits or regulatory info"
                       value={formData.permit_numbers} onChange={e => setFormData({ ...formData, permit_numbers: e.target.value })} />
                   </div>
                 </div>
               </div>
               <div className="pt-6 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
                 <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-semibold text-slate-600 rounded-xl hover:bg-gray-50 transition">Dismiss</button>
-                <button type="submit" disabled={loading} className="px-8 py-2.5 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 shadow-md transition disabled:opacity-50">
-                  {loading ? (isEdit ? 'Updating...' : 'Saving...') : (isEdit ? 'Update Customer' : 'Save Customer')}
+                <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 shadow-md transition disabled:opacity-50">
+                  {submitting ? (isEdit ? 'Updating...' : 'Saving...') : (isEdit ? 'Update Customer' : 'Save Customer')}
                 </button>
               </div>
             </form>
