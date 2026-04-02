@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { Users, Store, Package, Activity, ArrowUpRight, TrendingUp, ShoppingCart } from 'lucide-react';
+import { Users, Store, Package, Activity, ArrowUpRight, TrendingUp, ShoppingCart, LayoutDashboard } from 'lucide-react';
 
 export default function DashboardPage() {
   const [stats, setStats] = useState<any>({ 
@@ -38,6 +38,48 @@ export default function DashboardPage() {
     { name: 'Total Orders', value: stats.orders.value, icon: ShoppingCart, change: stats.orders.change, color: 'from-fuchsia-400 to-purple-600', bg: 'bg-fuchsia-50/50' },
   ];
 
+  if (loading && stats.users.value === 0) {
+    return (
+      <div className="p-8 animate-in fade-in duration-700 max-w-[1600px] mx-auto space-y-12">
+        <div className="flex justify-between items-center gap-6">
+          <div className="space-y-3">
+            <div className="h-10 w-72 bg-slate-100 rounded-2xl animate-pulse" />
+            <div className="h-4 w-56 bg-slate-50 rounded-xl animate-pulse" />
+          </div>
+          <div className="h-8 w-32 bg-slate-100 rounded-full animate-pulse" />
+        </div>
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {[1, 2, 3, 4].map((i) => (
+            <div key={i} className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm animate-pulse flex flex-col gap-6">
+              <div className="flex justify-between items-center">
+                <div className="w-12 h-12 bg-slate-50 rounded-2xl" />
+                <div className="w-16 h-6 bg-emerald-50 rounded-full" />
+              </div>
+              <div className="space-y-2">
+                <div className="h-3 w-24 bg-slate-50 rounded-full" />
+                <div className="h-10 w-32 bg-slate-100 rounded-xl" />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-white rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden">
+          <div className="p-24 flex flex-col items-center justify-center space-y-6">
+            <div className="relative">
+              <div className="w-20 h-20 border-4 border-indigo-50 border-t-indigo-600 rounded-full animate-spin" />
+              <LayoutDashboard className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 text-indigo-400 animate-pulse" />
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-lg font-black text-slate-800 uppercase tracking-tighter">Initializing Overview Matrix</h3>
+              <p className="text-sm text-slate-400 font-bold uppercase tracking-widest">Compiling real-time system metrics...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
       <div className="flex items-center justify-between">
@@ -66,13 +108,9 @@ export default function DashboardPage() {
             </div>
             <div>
               <p className="text-slate-500 text-sm font-semibold tracking-wide uppercase mb-1">{stat.name}</p>
-              {loading ? (
-                <div className="h-8 w-24 bg-slate-100 rounded animate-pulse" />
-              ) : (
-                <p className="text-3xl font-bold text-slate-900 tracking-tight">
-                  {stat.value.toLocaleString()}
-                </p>
-              )}
+              <p className="text-3xl font-bold text-slate-900 tracking-tight">
+                {stat.value.toLocaleString()}
+              </p>
             </div>
           </div>
         ))}

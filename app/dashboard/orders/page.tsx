@@ -1,12 +1,13 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Plus, ClipboardList, Search, Eye, Trash2 } from 'lucide-react';
+import { Plus, ClipboardList, Search, Eye, Trash2, Truck } from 'lucide-react';
 import { API_URL } from '@/lib/config';
 import ConfirmModal from '@/components/ConfirmModal';
 import Link from 'next/link';
 
 export default function OrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -22,6 +23,8 @@ export default function OrdersPage() {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -54,6 +57,30 @@ export default function OrdersPage() {
       setIsDeleting(false);
     }
   };
+
+  if (loading && orders.length === 0) {
+    return (
+      <div className="p-8 animate-in fade-in duration-700 max-w-[1600px] mx-auto">
+        <div className="flex justify-between items-center mb-12 gap-6">
+          <div className="space-y-3">
+            <div className="h-10 w-64 bg-slate-100 rounded-2xl animate-pulse" />
+            <div className="h-4 w-48 bg-slate-50 rounded-xl animate-pulse" />
+          </div>
+          <div className="h-12 w-48 bg-slate-100 rounded-xl animate-pulse" />
+        </div>
+        
+        <div className="bg-white rounded-3xl shadow-[0_8px_40px_rgba(0,0,0,0.03)] border border-gray-100 overflow-hidden">
+          <div className="p-24 flex flex-col items-center justify-center space-y-6">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-slate-50 border-t-blue-600 rounded-full animate-spin" />
+              <Truck className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-6 h-6 text-blue-400 animate-pulse" />
+            </div>
+            <p className="text-sm font-black text-slate-300 uppercase tracking-[0.2em]">Tracing Logistics Network...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -103,28 +130,28 @@ export default function OrdersPage() {
             <tbody className="divide-y divide-gray-100 bg-white">
               {orders.map(o => (
                 <tr key={o.id} className="hover:bg-gray-50/80 transition-colors group">
-                  <td className="px-6 py-3 whitespace-nowrap text-sm font-mono font-bold text-gray-900">
+                  <td className="px-6 py-1 whitespace-nowrap text-sm font-mono font-bold text-gray-900">
                     {o.order_number}
                   </td>
-                  <td className="px-6 py-3 whitespace-nowrap text-xs font-mono text-gray-500">
+                  <td className="px-6 py-1 whitespace-nowrap text-xs font-mono text-gray-500">
                     {o.load_number || '—'}
                   </td>
-                  <td className="px-6 py-3 whitespace-nowrap text-sm font-semibold text-gray-700">
+                  <td className="px-6 py-1 whitespace-nowrap text-sm font-semibold text-gray-700">
                     {o.shop_name}
                   </td>
-                  <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-600">
+                  <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-600">
                     {o.user_name}
                   </td>
-                  <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-red-500">
+                  <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-red-500">
                     -${parseFloat(o.total_credits || 0).toFixed(2)}
                   </td>
-                  <td className="px-6 py-3 whitespace-nowrap text-sm font-medium text-emerald-600">
+                  <td className="px-6 py-1 whitespace-nowrap text-sm font-medium text-emerald-600">
                     +${parseFloat(o.total_deposit || 0).toFixed(2)}
                   </td>
-                  <td className="px-6 py-3 whitespace-nowrap text-sm font-bold text-blue-600">
+                  <td className="px-6 py-1 whitespace-nowrap text-sm font-bold text-blue-600">
                     ${parseFloat(o.total_amount).toFixed(2)}
                   </td>
-                  <td className="px-6 py-3 whitespace-nowrap">
+                  <td className="px-6 py-1 whitespace-nowrap">
                     <span className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-tight ${
                       o.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : 
                       o.status === 'pending' ? 'bg-amber-100 text-amber-700' : 'bg-gray-100 text-gray-700'
@@ -132,17 +159,17 @@ export default function OrdersPage() {
                       {o.status}
                     </span>
                   </td>
-                  <td className="px-6 py-3 whitespace-nowrap text-sm text-gray-500">
+                  <td className="px-6 py-1 whitespace-nowrap text-sm text-gray-500">
                     {new Date(o.created_at).toLocaleString()}
                   </td>
-                  <td className="px-6 py-3 whitespace-nowrap text-right">
+                  <td className="px-6 py-1 whitespace-nowrap text-right">
                     <div className="flex items-center justify-end gap-1">
-                      <button className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-all" title="View Details">
+                      <button className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-all font-medium" title="View Details">
                         <Eye className="w-4 h-4" />
                       </button>
                       <button 
                         onClick={() => handleDelete(o.id)}
-                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-all"
+                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-all font-medium"
                         title="Void Order"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -153,7 +180,7 @@ export default function OrdersPage() {
               ))}
             </tbody>
           </table>
-          {orders.length === 0 && (
+          {orders.length === 0 && !loading && (
             <div className="p-16 text-center flex flex-col items-center">
               <ClipboardList className="w-12 h-12 text-slate-300 mb-4" />
               <h3 className="text-lg font-bold text-slate-900">No documented orders</h3>
