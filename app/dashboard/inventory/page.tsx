@@ -1,7 +1,8 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Package, Search, Plus, Minus, History, AlertTriangle, CheckCircle2, MoreHorizontal } from 'lucide-react';
+import { Package, Search, Plus, Minus, History, AlertTriangle, CheckCircle2, MoreHorizontal, PlusCircle } from 'lucide-react';
 import { API_URL } from '@/lib/config';
+import Link from 'next/link';
 
 export default function InventoryPage() {
   const [inventory, setInventory] = useState<any[]>([]);
@@ -13,6 +14,7 @@ export default function InventoryPage() {
   const [adjustAmount, setAdjustAmount] = useState(0);
   const [adjustType, setAdjustType] = useState('RESTOCK');
   const [adjustNotes, setAdjustNotes] = useState('');
+  const [adjustUnitCost, setAdjustUnitCost] = useState(0);
 
   const fetchData = async () => {
     setLoading(true);
@@ -49,7 +51,8 @@ export default function InventoryPage() {
           item_id: selectedItem.id,
           quantity_changed: adjustType === 'RESTOCK' ? adjustAmount : -adjustAmount,
           type: adjustType,
-          notes: adjustNotes
+          notes: adjustNotes,
+          unit_cost: adjustType === 'RESTOCK' ? adjustUnitCost : 0
         })
       });
       const data = await res.json();
@@ -58,6 +61,7 @@ export default function InventoryPage() {
         setShowAdjustModal(false);
         setAdjustAmount(0);
         setAdjustNotes('');
+        setAdjustUnitCost(0);
       } else {
         alert(data.message);
       }
@@ -68,24 +72,35 @@ export default function InventoryPage() {
 
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-8 gap-6 pt-2">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Inventory Control</h1>
           <p className="text-slate-500 mt-1 font-medium">Monitor stock levels and track material movements.</p>
         </div>
-        <div className="flex bg-white p-1 rounded-xl shadow-sm border border-gray-100">
-          <button 
-            onClick={() => setActiveTab('status')}
-            className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'status' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}
+        
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full xl:w-auto">
+          <Link 
+            href="/dashboard/inventory/add"
+            className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all transform hover:scale-[1.02] active:scale-100 w-full sm:w-auto justify-center"
           >
-            Live Status
-          </button>
-          <button 
-            onClick={() => setActiveTab('history')}
-            className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'history' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}
-          >
-            Transaction Log
-          </button>
+            <PlusCircle className="w-5 h-5" />
+            Add New Stock
+          </Link>
+          
+          <div className="flex bg-white p-1 rounded-xl shadow-sm border border-gray-100 w-full sm:w-auto">
+            <button 
+              onClick={() => setActiveTab('status')}
+              className={`flex-1 sm:flex-none px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'status' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}
+            >
+              Live Status
+            </button>
+            <button 
+              onClick={() => setActiveTab('history')}
+              className={`flex-1 sm:flex-none px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'history' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}
+            >
+              Transaction Log
+            </button>
+          </div>
         </div>
       </div>
 
@@ -186,6 +201,7 @@ export default function InventoryPage() {
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Item</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Transaction</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-center">qty</th>
+                  <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest text-center">Unit Cost</th>
                   <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-widest">Reference / Notes</th>
                 </tr>
               </thead>
@@ -208,6 +224,9 @@ export default function InventoryPage() {
                     </td>
                     <td className={`px-6 py-4 text-center font-black ${log.quantity_changed > 0 ? 'text-emerald-600' : 'text-rose-600'}`}>
                       {log.quantity_changed > 0 ? `+${log.quantity_changed}` : log.quantity_changed}
+                    </td>
+                    <td className="px-6 py-4 text-center font-bold text-slate-600">
+                      {log.unit_cost > 0 ? `$${parseFloat(log.unit_cost).toFixed(2)}` : '-'}
                     </td>
                     <td className="px-6 py-4 text-sm text-slate-500 italic max-w-xs truncate">
                       {log.notes || 'No reference'}
@@ -260,6 +279,20 @@ export default function InventoryPage() {
                     onChange={e => setAdjustAmount(parseInt(e.target.value))}
                   />
                 </div>
+
+                {adjustType === 'RESTOCK' && (
+                  <div>
+                    <label className="block text-xs font-bold text-slate-500 mb-2 uppercase">Unit Cost ($)</label>
+                    <input 
+                      type="number" 
+                      step="0.01"
+                      className="w-full px-4 py-3 bg-gray-50 border border-gray-100 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-xl font-bold"
+                      value={adjustUnitCost}
+                      onChange={e => setAdjustUnitCost(parseFloat(e.target.value))}
+                    />
+                  </div>
+                )}
+
 
                 <div>
                   <label className="block text-xs font-bold text-slate-500 mb-2 uppercase">Notes / Reason</label>
