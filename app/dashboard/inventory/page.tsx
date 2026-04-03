@@ -202,8 +202,8 @@ export default function InventoryPage() {
               >
                 <option value="ALL_STOCK">🌍 Global Total (All Locations)</option>
                 <option value="WAREHOUSE">🏢 Main Warehouse</option>
-                <optgroup label="Sales Force Regions">
-                  {users.filter(u => u.role === 'salesperson').map(u => (
+                <optgroup label="Staff Regions">
+                  {users.filter(u => u.role === 'staff').map(u => (
                     <option key={u.id} value={`SP_${u.id}`}>📍 {u.inventory_location || 'Field'}: {u.name}</option>
                   ))}
                 </optgroup>
@@ -414,18 +414,18 @@ export default function InventoryPage() {
 
               <div className="space-y-6">
                 <div>
-                  <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Assign to Person / Region</label>
+                  <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Assign to Staff Member</label>
                   <select
                     required
                     className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-xl focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none text-slate-900 font-bold appearance-none transition-all cursor-pointer"
                     value={selectedSalesperson}
                     onChange={e => setSelectedSalesperson(e.target.value)}
                   >
-                    <option value="">-- Select Destination --</option>
+                    <option value="">-- Select Staff Member --</option>
                     {users
-                      .filter(u => ['salesperson', 'staff', 'admin'].includes(u.role.toLowerCase()))
+                      .filter(u => u.role === 'staff')
                       .map(u => (
-                        <option key={u.id} value={u.id}>{u.name} ({u.inventory_location || u.role})</option>
+                        <option key={u.id} value={u.id}>{u.name} ({u.inventory_location || 'No Location'})</option>
                       ))}
                   </select>
                 </div>

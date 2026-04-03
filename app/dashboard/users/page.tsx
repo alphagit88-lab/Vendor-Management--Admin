@@ -1,19 +1,20 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Plus, UserPlus, Search, Edit, Trash2, X, Users } from 'lucide-react';
+import { Plus, UserPlus, Search, Edit, Trash2, X, Users, Eye, EyeOff } from 'lucide-react';
 import { API_URL } from '@/lib/config';
 import ConfirmModal from '@/components/ConfirmModal';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ name: '', phone: '', email: '', password: '', role: 'staff', inventory_location: '' });
+  const [formData, setFormData] = useState({ name: '', phone: '', username: '', email: '', password: '', role: 'staff', inventory_location: '' });
   const [loading, setLoading] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const fetchUsers = async () => {
     try {
@@ -54,7 +55,8 @@ export default function UsersPage() {
       if (data.success) {
         fetchUsers();
         setShowModal(false);
-        setFormData({ name: '', phone: '', email: '', password: '', role: 'staff', inventory_location: '' });
+        setShowPassword(false);
+        setFormData({ name: '', phone: '', username: '', email: '', password: '', role: 'staff', inventory_location: '' });
         setIsEdit(false);
         setEditId(null);
       } else {
@@ -70,6 +72,7 @@ export default function UsersPage() {
   const handleEdit = (user: any) => {
     setFormData({
       name: user.name,
+      username: user.username || '',
       phone: user.phone,
       email: user.email || '',
       password: '',
@@ -78,6 +81,7 @@ export default function UsersPage() {
     });
     setEditId(user.id);
     setIsEdit(true);
+    setShowPassword(false);
     setShowModal(true);
   };
 
@@ -146,7 +150,8 @@ export default function UsersPage() {
           onClick={() => {
             setIsEdit(false);
             setEditId(null);
-            setFormData({ name: '', phone: '', email: '', password: '', role: 'staff', inventory_location: '' });
+            setShowPassword(false);
+            setFormData({ name: '', phone: '', username: '', email: '', password: '', role: 'staff', inventory_location: '' });
             setShowModal(true);
           }}
           className="bg-indigo-600 shadow-sm shadow-indigo-200 text-white flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm hover:bg-indigo-700 transition-all font-medium"
@@ -172,10 +177,9 @@ export default function UsersPage() {
           <table className="w-full min-w-[800px] text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Member Name</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Staff Name</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Phone Number</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Email Address</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Primary Role</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Sub-inventory (Location)</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Date Joined</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right">Actions</th>
@@ -192,11 +196,6 @@ export default function UsersPage() {
                   </td>
                   <td className="px-6 py-1 whitespace-nowrap">
                     <span className="text-sm text-gray-600">{u.email || '—'}</span>
-                  </td>
-                  <td className="px-6 py-1 whitespace-nowrap">
-                    <span className={`inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-tight ${u.role === 'admin' ? 'bg-purple-100 text-purple-700' : 'bg-emerald-100 text-emerald-700'}`}>
-                      {u.role}
-                    </span>
                   </td>
                   <td className="px-6 py-1 whitespace-nowrap">
                     {u.inventory_location ? (
@@ -265,56 +264,56 @@ export default function UsersPage() {
             <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6 flex-1 overflow-y-auto font-medium">
               <div className="space-y-5">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Full Legal Name</label>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">Full Name</label>
                   <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" placeholder="Jane Doe" required
                     value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">Email Address <span className="text-rose-500">*</span></label>
+                    <input type="email" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" placeholder="jane@company.com" required
+                      value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
+                    <p className="text-[10px] text-slate-400 mt-1 font-medium">Used for staff login</p>
+                  </div>
+                  <div>
                     <label className="block text-sm font-semibold text-slate-700 mb-2">Phone</label>
                     <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" placeholder="(555) 000-0000" required
                       value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
                   </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Email Address</label>
-                    <input type="email" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" placeholder="jane@company.com"
-                      value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">Mapped Sub-inventory (Location)</label>
+                  <input 
+                    type="text" 
+                    className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" 
+                    placeholder="e.g. Kandy, Colombo, Galle"
+                    value={formData.inventory_location} 
+                    onChange={e => setFormData({ ...formData, inventory_location: e.target.value })} 
+                  />
                   </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Primary Role</label>
-                    <select 
-                      className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-bold"
-                      value={formData.role} 
-                      onChange={e => setFormData({ ...formData, role: e.target.value })}
-                    >
-                      <option value="staff">Standard Staff</option>
-                      <option value="salesperson">Regional Sales Person</option>
-                      <option value="manager">Operations Manager</option>
-                    </select>
-                  </div>
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Mapped Sub-inventory (Location)</label>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">{isEdit ? 'Update Security Password (Optional)' : 'Secure Temporary Password'}</label>
+                  <div className="relative">
                     <input 
-                      type="text" 
-                      className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" 
-                      placeholder="e.g. Kandy, Colombo, Galle"
-                      value={formData.inventory_location} 
-                      onChange={e => setFormData({ ...formData, inventory_location: e.target.value })} 
+                      type={showPassword ? 'text' : 'password'} 
+                      className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition" 
+                      placeholder={isEdit ? "Enter new password to change..." : "••••••••"} 
+                      required={!isEdit}
+                      value={formData.password} 
+                      onChange={e => setFormData({ ...formData, password: e.target.value })} 
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-indigo-500 transition-colors"
+                    >
+                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="h-4 w-4" />}
+                    </button>
                   </div>
                 </div>
-
-                {!isEdit && (
-                  <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Secure Temporary Password</label>
-                    <input type="password" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition" placeholder="••••••••" required={!isEdit}
-                      value={formData.password} onChange={e => setFormData({ ...formData, password: e.target.value })} />
-                  </div>
-                )}
-              </div>
               <div className="pt-6 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
                 <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-semibold text-slate-600 rounded-xl hover:bg-gray-50 transition">Cancel</button>
                 <button type="submit" disabled={loading} className="px-8 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 shadow-md transition disabled:opacity-50">
