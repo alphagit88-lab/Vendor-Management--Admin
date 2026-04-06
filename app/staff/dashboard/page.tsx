@@ -44,7 +44,11 @@ export default function StaffDashboard() {
             const userId = payload.id;
             
             const assignedCount = invData.data.reduce((acc: number, item: any) => {
-                const sub = item.sub_inventories?.find((s: any) => s.user_id == userId);
+                let subs = item.sub_inventories;
+                if (typeof subs === 'string') {
+                    try { subs = JSON.parse(subs); } catch(e) { subs = []; }
+                }
+                const sub = subs?.find((s: any) => s.user_id == userId);
                 return acc + (sub?.quantity || 0);
             }, 0);
             
