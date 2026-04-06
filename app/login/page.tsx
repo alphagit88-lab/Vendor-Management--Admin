@@ -28,6 +28,7 @@ export default function Login() {
       const data = await res.json();
       if (data.success) {
         localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
         router.push('/dashboard');
       } else {
         setError(data.message || 'Login failed');

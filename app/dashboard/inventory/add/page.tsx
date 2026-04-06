@@ -58,7 +58,7 @@ export default function AddInventoryPage() {
     setStatus(null);
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/inventory`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/inventory/update`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
