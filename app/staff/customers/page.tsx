@@ -5,6 +5,7 @@ import {
   Users, Building2, MapPin, Phone, ChevronRight, Search, 
   Plus, Minus, X, ShoppingCart, Receipt, Package, CheckCircle2, History
 } from 'lucide-react';
+import { API_URL } from '@/lib/config';
 
 export default function StaffCustomersPage() {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -29,10 +30,10 @@ export default function StaffCustomersPage() {
   const fetchData = async () => {
     try {
       const [custRes, invRes] = await Promise.all([
-        fetch('http://localhost:5000/api/customers', {
+        fetch(`${API_URL}/customers`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         }),
-        fetch('http://localhost:5000/api/inventory', {
+        fetch(`${API_URL}/inventory`, {
             headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
         })
       ]);
@@ -107,7 +108,7 @@ export default function StaffCustomersPage() {
     setIsProcessing(true);
     
     try {
-      const res = await fetch('http://localhost:5000/api/orders', {
+      const res = await fetch(`${API_URL}/orders`, {
         method: 'POST',
         headers: { 
             'Content-Type': 'application/json', 
