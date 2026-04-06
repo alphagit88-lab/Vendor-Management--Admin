@@ -145,10 +145,10 @@ export default function StaffCustomersPage() {
         setShowInvoice(true);
         fetchData();
       } else {
-        alert(data.message || "Sale processing failed");
+        alert(data.message + (data.detail ? ": " + data.detail : ""));
       }
-    } catch (err) {
-      alert("Error connecting to sales server");
+    } catch (err: any) {
+      alert("Network Error: " + err.message);
     } finally {
       setIsProcessing(false);
     }
