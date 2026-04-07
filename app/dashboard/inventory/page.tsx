@@ -216,8 +216,9 @@ export default function InventoryPage() {
                                 } else if (selectedSubInventory === 'WAREHOUSE') {
                                     staffStock = 0;
                                 } else if (selectedSubInventory.startsWith('SP_')) {
-                                    const spId = parseInt(selectedSubInventory.split('_')[1]);
-                                    const spData = (item.sub_inventories || []).find((s: any) => s.user_id === spId);
+                                    const spId = selectedSubInventory.split('_')[1];
+                                    const subs = Array.isArray(item.sub_inventories) ? item.sub_inventories : [];
+                                    const spData = subs.find((s: any) => s.user_id?.toString() === spId);
                                     staffStock = Number(spData?.quantity || 0);
                                 }
 
