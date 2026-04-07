@@ -89,7 +89,9 @@ export default function StaffCustomersPage() {
   const updateQty = (id: string, delta: number) => {
     setSaleItems(saleItems.map(item => {
         if (item.item_id === id) {
-            const newQty = Math.max(1, Math.min(item.salesperson_stock, item.quantity + delta));
+            // Validate: 1) Min 1, 2) Max 10, 3) Max Stock
+            const maxAllowed = Math.min(item.salesperson_stock, 10);
+            const newQty = Math.max(1, Math.min(maxAllowed, item.quantity + delta));
             return { ...item, quantity: newQty, subtotal: newQty * item.price };
         }
         return item;
@@ -244,7 +246,7 @@ export default function StaffCustomersPage() {
                             <div className="p-2 bg-slate-50 rounded-xl text-slate-400 group-hover:text-indigo-500 group-hover:bg-indigo-50 transition-colors">
                                 <Package className="w-5 h-5" />
                             </div>
-                            <span className="text-[10px] font-black text-slate-300 group-hover:text-indigo-300 uppercase">Held: {item.salesperson_stock}</span>
+                            <span className="text-[10px] font-black text-slate-900 uppercase">Stock: {item.salesperson_stock}</span>
                         </div>
                         <h4 className="font-black text-slate-800 text-sm leading-tight uppercase line-clamp-2">{item.item_name}</h4>
                         <div className="mt-4 flex items-center justify-between">
@@ -367,6 +369,17 @@ export default function StaffCustomersPage() {
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-3xl" />
           <div className="bg-white rounded-[2.5rem] w-full max-w-2xl shadow-2xl relative z-10 overflow-hidden flex flex-col p-12 transition-all">
             
+            <button 
+              onClick={() => {
+                setShowInvoice(false);
+                setSaleItems([]);
+                setOrderMeta({ notes: '', load_number: '', credits: 0, deposit: 0 });
+              }} 
+              className="absolute top-8 right-8 p-3 bg-slate-50 hover:bg-slate-100 rounded-2xl text-slate-400 transition no-print"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
             <div className="flex border-b border-slate-100 pb-10 mb-10 justify-between items-start">
                <div className="space-y-4">
                   <div className="flex items-center gap-3">
@@ -436,10 +449,12 @@ export default function StaffCustomersPage() {
                 </div>
             </div>
 
-            <div className="mt-10 flex gap-4 no-print">
-               <button onClick={() => setShowInvoice(false)} className="flex-1 py-5 bg-slate-50 hover:bg-slate-100 rounded-2xl text-[10px] font-black text-slate-400 uppercase tracking-widest transition">Close Document & Finish</button>
-               <button onClick={() => window.print()} className="flex-1 py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-indigo-100 transition flex items-center justify-center gap-2">
-                 Print Invoice / Get PDF
+            <div className="mt-10 no-print">
+               <button 
+                onClick={() => window.print()} 
+                className="w-full py-5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-xl shadow-indigo-100 transition flex items-center justify-center gap-2"
+               >
+                 Download / Print Bill
                </button>
             </div>
           </div>

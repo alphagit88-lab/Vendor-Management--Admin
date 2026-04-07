@@ -22,6 +22,8 @@ export default function ItemsPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState('');
+
   const fetchData = async () => {
     try {
       const [itemsRes, catRes] = await Promise.all([
@@ -42,6 +44,16 @@ export default function ItemsPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const filteredItems = items.filter(i => {
+    const matchesCategory = selectedCategory === 'All' || (i.category_name || 'Uncategorized') === selectedCategory;
+    const matchesSearch = 
+      i.description_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      i.item_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (i.category_name || 'Uncategorized').toLowerCase().includes(searchTerm.toLowerCase());
+    
+    return matchesCategory && matchesSearch;
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -208,28 +220,34 @@ export default function ItemsPage() {
             <input
               type="text"
               placeholder="Search product items..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-shadow"
             />
           </div>
+          {searchTerm && (
+            <span className="ml-4 text-xs font-bold text-orange-600 uppercase tracking-widest bg-orange-50 px-3 py-1 rounded-full animate-in fade-in zoom-in duration-300">
+              Found {filteredItems.length} results
+            </span>
+          )}
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px] text-left border-collapse">
+          <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Description</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Item #</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Size / Qty</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Unit Cost</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Vendor Cost</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">SRP</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Category</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right">Actions</th>
+                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Description</th>
+                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Item #</th>
+                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Size / Qty</th>
+                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Unit Cost</th>
+                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Vendor Cost</th>
+                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">SRP</th>
+                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Category</th>
+                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right font-sans">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
-              {items
-                .filter(i => selectedCategory === 'All' || (i.category_name || 'Uncategorized') === selectedCategory)
+              {filteredItems
                 .map(i => (
                   <tr key={i.id} className="hover:bg-gray-50/80 transition-colors group">
                   <td className="px-6 py-1 whitespace-nowrap">
