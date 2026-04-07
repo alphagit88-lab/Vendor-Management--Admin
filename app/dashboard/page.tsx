@@ -10,25 +10,32 @@ export default function DashboardPage() {
     items: { value: 0, change: '0%' }, 
     orders: { value: 0, change: '0%' } 
   });
+  const [activities, setActivities] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchDashboardData = async () => {
+      const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      const headers = { 'Authorization': `Bearer ${localStorage.getItem('token')}` };
+      
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api'}/dashboard/stats`, {
-          headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        const data = await res.json();
-        if (data.success) {
-          setStats(data.data);
-        }
+        const [statsRes, activityRes] = await Promise.all([
+          fetch(`${BASE_URL}/dashboard/stats`, { headers }),
+          fetch(`${BASE_URL}/dashboard/activities`, { headers })
+        ]);
+        
+        const statsData = await statsRes.json();
+        const activityData = await activityRes.json();
+        
+        if (statsData.success) setStats(statsData.data);
+        if (activityData.success) setActivities(activityData.data);
       } catch (err) {
-        console.error("Error fetching stats:", err);
+        console.error("Error fetching dashboard data:", err);
       } finally {
         setLoading(false);
       }
     };
-    fetchStats();
+    fetchDashboardData();
   }, []);
 
   const statCards = [
@@ -81,7 +88,7 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out pb-12">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-[30px] leading-none font-bold text-slate-900 tracking-tight">System Overview</h1>
@@ -116,17 +123,52 @@ export default function DashboardPage() {
         ))}
       </div>
 
-      <div className="mt-8 bg-white border border-gray-100 rounded-2xl p-8 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-indigo-50 rounded-lg">
-            <TrendingUp className="w-5 h-5 text-indigo-600" />
+      <div className="mt-8 bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm">
+        <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-indigo-50 rounded-lg">
+              <Activity className="w-5 h-5 text-indigo-600" />
+            </div>
+            <h2 className="text-xl font-bold text-slate-900 tracking-tight">Recent Activity</h2>
           </div>
-          <h2 className="text-xl font-bold text-slate-900">Recent Activity</h2>
+          <span className="text-xs font-bold text-indigo-600 uppercase tracking-widest bg-indigo-50 px-3 py-1 rounded-full">Real-time Feed</span>
         </div>
-        <div className="p-12 text-center flex flex-col items-center justify-center border-2 border-dashed border-gray-200 rounded-xl bg-gray-50/50">
-          <Activity className="w-10 h-10 text-slate-300 mb-4" />
-          <h3 className="text-sm font-semibold text-slate-900">No recent activities</h3>
-          <p className="text-sm text-slate-500 mt-1 max-w-sm">Activity logs will appear here when users or shops are added to the system.</p>
+        
+        <div className="divide-y divide-gray-100">
+          {activities.length > 0 ? (
+            activities.map((item, idx) => (
+              <div key={idx} className="p-4 hover:bg-gray-50 transition-colors flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4">
+                  <div className={`p-2.5 rounded-xl ${
+                    item.type === 'user' ? 'bg-blue-50 text-blue-600' :
+                    item.type === 'customer' ? 'bg-emerald-50 text-emerald-600' :
+                    'bg-amber-50 text-amber-600'
+                  }`}>
+                    {item.type === 'user' ? <Users className="w-5 h-5" /> : 
+                     item.type === 'customer' ? <Store className="w-5 h-5" /> : 
+                     <ShoppingCart className="w-5 h-5" />}
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-slate-900">{item.title}</p>
+                    <p className="text-[12px] font-medium text-slate-500">{item.description}</p>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <p className="text-[11px] font-bold text-slate-400 uppercase tracking-tighter">
+                    {new Date(item.created_at).toLocaleDateString()}
+                  </p>
+                  <p className="text-[11px] font-medium text-slate-300">
+                    {new Date(item.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="p-20 text-center flex flex-col items-center justify-center bg-gray-50/30">
+              <Activity className="w-12 h-12 text-slate-200 mb-4" />
+              <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest">No Recent Activity Detected</h3>
+            </div>
+          )}
         </div>
       </div>
     </div>
