@@ -42,25 +42,18 @@ export default function StaffCustomersPage() {
       
       if (custData.success) setCustomers(custData.data);
       if (invData.success) {
-        let user = JSON.parse(localStorage.getItem('user') || '{}');
-        
-        // Fallback: If user.id is missing, try to extract it from the token
-        if (!user.id) {
-          try {
-            const token = localStorage.getItem('token');
-            if (token) {
-              const payload = JSON.parse(atob(token.split('.')[1]));
-              user = { id: payload.id };
-            }
-          } catch (e) { console.error('Token Decode Error:', e); }
-        }
+        const token = localStorage.getItem('token');
+        const payload = JSON.parse(atob(token?.split('.')[1] || ""));
+        const currentUserId = payload.id;
 
         // Only show items that this salesperson has in their sub-inventory
         const filteredInv = invData.data.filter((item: any) => {
-            const sub = (item.sub_inventories || []).find((s: any) => s.user_id == user.id);
+            const subs = Array.isArray(item.sub_inventories) ? item.sub_inventories : [];
+            const sub = subs.find((s: any) => s.user_id == currentUserId);
             return sub && Number(sub.quantity) > 0;
         }).map((item: any) => {
-            const sub = (item.sub_inventories || []).find((s: any) => s.user_id == user.id);
+            const subs = Array.isArray(item.sub_inventories) ? item.sub_inventories : [];
+            const sub = subs.find((s: any) => s.user_id == currentUserId);
             return { ...item, salesperson_stock: Number(sub.quantity) };
         });
         setInventory(filteredInv);
