@@ -16,6 +16,8 @@ export default function UsersPage() {
   const [isDeleting, setIsDeleting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  const [searchTerm, setSearchTerm] = useState('');
+
   const fetchUsers = async () => {
     try {
       const res = await fetch(`${API_URL}/users`, {
@@ -35,6 +37,19 @@ export default function UsersPage() {
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const filteredUsers = users.filter(u => {
+    // Exclude admins from the staff directory view
+    if (u.role === 'admin') return false;
+
+    const term = searchTerm.toLowerCase();
+    return (
+      u.name?.toLowerCase().includes(term) ||
+      u.phone?.toLowerCase().includes(term) ||
+      u.email?.toLowerCase().includes(term) ||
+      u.inventory_location?.toLowerCase().includes(term)
+    );
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -168,25 +183,27 @@ export default function UsersPage() {
             <input
               type="text"
               placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 transition-shadow"
             />
           </div>
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px] text-left border-collapse">
+          <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Staff Name</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Phone Number</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Email Address</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Sub-inventory (Location)</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Date Joined</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right">Actions</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Staff Name</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Phone Number</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Email Address</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Sub-inventory (Location)</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Date Joined</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right font-sans">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
-              {users.filter(u => u.role !== 'admin').map(u => (
+              {filteredUsers.map(u => (
                 <tr key={u.id} className="hover:bg-gray-50/80 transition-colors group">
                   <td className="px-6 py-1 whitespace-nowrap">
                     <span className="text-sm font-semibold text-gray-900">{u.name}</span>
@@ -262,44 +279,43 @@ export default function UsersPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6 flex-1 overflow-y-auto font-medium">
-              <div className="space-y-5">
+              <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Full Name</label>
-                  <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" placeholder="Jane Doe" required
+                  <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Full Name</label>
+                  <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600/10 rounded-lg transition text-sm outline-none font-medium" placeholder="Jane Doe" required
                     value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Email Address <span className="text-rose-500">*</span></label>
-                    <input type="email" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" placeholder="jane@company.com" required
+                    <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Email Address <span className="text-rose-500">*</span></label>
+                    <input type="email" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600/10 rounded-lg transition text-sm outline-none font-medium" placeholder="jane@company.com" required
                       value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
-                    <p className="text-[10px] text-slate-400 mt-1 font-medium">Used for staff login</p>
+                    <p className="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-wider">Used for staff login</p>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-slate-700 mb-2">Phone</label>
-                    <input type="text" className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" placeholder="(555) 000-0000" required
+                    <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Phone</label>
+                    <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600/10 rounded-lg transition text-sm outline-none font-medium" placeholder="(555) 000-0000" required
                       value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Mapped Sub-inventory (Location)</label>
+                  <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Mapped Sub-inventory (Location)</label>
                   <input 
                     type="text" 
-                    className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition font-medium" 
+                    className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600/10 rounded-lg transition text-sm outline-none font-medium" 
                     placeholder="e.g. Kandy, Colombo, Galle"
                     value={formData.inventory_location} 
                     onChange={e => setFormData({ ...formData, inventory_location: e.target.value })} 
                   />
-                  </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">{isEdit ? 'Update Security Password (Optional)' : 'Secure Temporary Password'}</label>
+                  <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">{isEdit ? 'Update Security Password (Optional)' : 'Secure Temporary Password'}</label>
                   <div className="relative">
                     <input 
                       type={showPassword ? 'text' : 'password'} 
-                      className="w-full px-4 py-3 bg-gray-50 border border-transparent focus:bg-white focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl transition" 
+                      className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600/10 rounded-lg transition text-sm outline-none font-mono" 
                       placeholder={isEdit ? "Enter new password to change..." : "••••••••"} 
                       required={!isEdit}
                       value={formData.password} 
@@ -314,9 +330,11 @@ export default function UsersPage() {
                     </button>
                   </div>
                 </div>
-              <div className="pt-6 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
-                <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-semibold text-slate-600 rounded-xl hover:bg-gray-50 transition">Cancel</button>
-                <button type="submit" disabled={loading} className="px-8 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 shadow-md transition disabled:opacity-50">
+              </div>
+
+              <div className="pt-8 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
+                <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-bold text-slate-500 rounded-lg hover:bg-gray-50 transition uppercase text-[10px] tracking-widest">Cancel</button>
+                <button type="submit" disabled={loading} className="px-8 py-2.5 bg-indigo-600 text-white font-black rounded-lg hover:bg-indigo-700 shadow-lg shadow-indigo-100 transition disabled:opacity-50 uppercase text-[10px] tracking-widest">
                   {loading ? (isEdit ? 'Updating...' : 'Provisioning...') : (isEdit ? 'Update Record' : 'Provision Account')}
                 </button>
               </div>

@@ -325,11 +325,11 @@ export default function ItemsPage() {
           <div className="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
             <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center text-orange-600">
+                <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
                   <Package className="w-4 h-4" />
                 </div>
-                <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-                  {isEdit ? 'Update Item Matrix' : 'Product Item'}
+                <h2 className="text-xl font-black tracking-tight text-slate-900 uppercase">
+                  {isEdit ? 'Update Item Matrix' : 'Manage Product Node'}
                 </h2>
               </div>
               <button className="p-2 bg-gray-50 hover:bg-gray-100 rounded-full transition" onClick={() => setShowModal(false)}>
@@ -338,78 +338,82 @@ export default function ItemsPage() {
             </div>
 
             <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6 flex-1 overflow-y-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Product Description</h3>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Standard Nomenclature / Description</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="e.g. Premium Lager" required
-                      value={formData.description_name} onChange={e => setFormData({ ...formData, description_name: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Quantity and Size</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="ex: 12 pack 16 oz"
-                      value={formData.quantity_size} onChange={e => setFormData({ ...formData, quantity_size: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Category</label>
-                    <select 
-                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm appearance-none cursor-pointer"
-                      required
-                      value={formData.category_id} 
-                      onChange={e => setFormData({ ...formData, category_id: e.target.value })}
-                    >
-                      <option value="">-- Select Category --</option>
-                      {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                    </select>
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Product Nomenclature</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Standard Description</label>
+                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none" placeholder="e.g. Premium Lager" required
+                        value={formData.description_name} onChange={e => setFormData({ ...formData, description_name: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Quantity and Size</label>
+                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none" placeholder="ex: 12 pack 16 oz"
+                        value={formData.quantity_size} onChange={e => setFormData({ ...formData, quantity_size: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Category</label>
+                      <select 
+                        className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none appearance-none cursor-pointer"
+                        required
+                        value={formData.category_id} 
+                        onChange={e => setFormData({ ...formData, category_id: e.target.value })}
+                      >
+                        <option value="">-- Select Category --</option>
+                        {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                      </select>
+                    </div>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Identifiers & Logistics</h3>
-                  <div>
-                    <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Global UPC</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm font-mono" placeholder="000000000000"
-                      value={formData.upc} onChange={e => setFormData({ ...formData, upc: e.target.value })} />
-                  </div>
-                  <div className="grid grid-cols-3 gap-4">
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Financial Parameters</h3>
+                  <div className="space-y-4">
                     <div>
-                      <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Unit Cost</label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-2.5 text-gray-400 text-sm">$</span>
-                        <input type="number" step="0.01" className="w-full pl-7 pr-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="0.00"
-                          value={formData.cost} onChange={e => setFormData({ ...formData, cost: e.target.value })} />
-                      </div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Global UPC</label>
+                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="000000000000"
+                        value={formData.upc} onChange={e => setFormData({ ...formData, upc: e.target.value })} />
                     </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Vendor Cost</label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-2.5 text-gray-400 text-sm">$</span>
-                        <input type="number" step="0.01" className="w-full pl-7 pr-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="0.00"
-                          value={formData.vendor_cost} onChange={e => setFormData({ ...formData, vendor_cost: e.target.value })} />
+                    <div className="grid grid-cols-3 gap-3">
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Unit Cost</label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
+                          <input type="number" step="0.01" className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="0.00"
+                            value={formData.cost} onChange={e => setFormData({ ...formData, cost: e.target.value })} />
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Selling Price (SRP)</label>
-                      <div className="relative">
-                        <span className="absolute left-3 top-2.5 text-gray-400 text-sm">$</span>
-                        <input type="number" step="0.01" className="w-full pl-7 pr-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition text-sm" placeholder="0.00" required
-                          value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Vendor Cost</label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
+                          <input type="number" step="0.01" className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="0.00"
+                            value={formData.vendor_cost} onChange={e => setFormData({ ...formData, vendor_cost: e.target.value })} />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">SRP</label>
+                        <div className="relative">
+                          <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
+                          <input type="number" step="0.01" className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="0.00" required
+                            value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-xs font-bold text-gray-500 mb-1 uppercase tracking-tight">Additional System Parameters (Optional)</label>
-                  <textarea className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-orange-500 rounded-xl transition resize-none h-20 text-sm" placeholder="Detailed product specifications..."
+                  <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Internal System Notes</label>
+                  <textarea className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition resize-none h-20 text-sm font-medium outline-none" placeholder="Detailed product specifications..."
                     value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
                 </div>
               </div>
-              <div className="pt-6 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
-                <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-semibold text-slate-600 rounded-xl hover:bg-gray-50 transition">Suspend</button>
-                <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 shadow-[0_4px_14px_rgba(249,115,22,0.3)] transition-all hover:-translate-y-0.5 disabled:opacity-50 font-bold uppercase tracking-widest text-xs">
-                  {submitting ? (isEdit ? 'Updating...' : 'Committing...') : (isEdit ? 'Update Node' : 'Commit Node')}
+              <div className="pt-8 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
+                <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-bold text-slate-500 rounded-lg hover:bg-gray-50 transition uppercase text-[10px] tracking-widest">Cancel</button>
+                <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-orange-600 text-white font-black rounded-lg hover:bg-orange-700 shadow-lg shadow-orange-100 transition disabled:opacity-50 uppercase text-[10px] tracking-widest">
+                  {submitting ? (isEdit ? 'Updating...' : 'Committing...') : (isEdit ? 'Update Record' : 'Commit Record')}
                 </button>
               </div>
             </form>

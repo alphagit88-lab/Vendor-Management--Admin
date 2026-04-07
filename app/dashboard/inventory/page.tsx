@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Package, Search, Plus, Minus, History, AlertTriangle, CheckCircle2, MoreHorizontal, PlusCircle, RefreshCw } from 'lucide-react';
+import { Package, Search, Plus, Minus, History, AlertTriangle, CheckCircle2, MoreHorizontal, PlusCircle, RefreshCw, ChevronDown } from 'lucide-react';
 import { API_URL } from '@/lib/config';
 import Link from 'next/link';
 
@@ -132,39 +132,42 @@ export default function InventoryPage() {
         <div className="flex flex-col sm:flex-row items-center gap-4 w-full xl:w-auto">
           <Link
             href="/dashboard/inventory/add"
-            className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg h-fit hover:bg-indigo-700 transition-all w-full sm:w-auto justify-center"
+            className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-black shadow-lg shadow-indigo-100 h-fit hover:bg-indigo-700 transition-all w-full sm:w-auto justify-center uppercase text-[11px] tracking-widest"
           >
-            <PlusCircle className="w-5 h-5" /> Add New Stock
+            <PlusCircle className="w-4 h-4" /> Add New Stock
           </Link>
 
-          <div className="flex bg-white p-1 rounded-xl shadow-sm border border-gray-100 h-fit">
+          <div className="flex bg-white p-1 rounded-lg shadow-sm border border-gray-100 h-fit">
             <button
               onClick={() => setActiveTab('status')}
-              className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'status' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}
+              className={`px-6 py-2 rounded-md text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'status' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'}`}
             >
               Status
             </button>
             <button
               onClick={() => setActiveTab('history')}
-              className={`px-6 py-2 rounded-lg text-sm font-semibold transition-all ${activeTab === 'history' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}
+              className={`px-6 py-2 rounded-md text-[11px] font-black uppercase tracking-widest transition-all ${activeTab === 'history' ? 'bg-indigo-600 text-white shadow-md' : 'text-slate-400 hover:bg-slate-50'}`}
             >
               Log
             </button>
           </div>
 
-          <div className="flex items-center gap-3 bg-white p-1.5 rounded-2xl border border-indigo-50 shadow-sm h-fit">
-              <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest leading-none px-2">Sub-Inventory</span>
-              <select 
-                value={selectedSubInventory}
-                onChange={(e) => setSelectedSubInventory(e.target.value)}
-                className="bg-transparent text-slate-800 font-bold text-xs py-1 outline-none cursor-pointer pr-4"
-              >
-                <option value="ALL_STOCK">🌍 Global Total</option>
-                <option value="WAREHOUSE">🏢 Main Warehouse</option>
-                {users.filter(u => u.role === 'staff').map(u => (
-                  <option key={u.id} value={`SP_${u.id}`}>📍 {u.name}</option>
-                ))}
-              </select>
+          <div className="flex items-center gap-3 bg-white p-1 rounded-lg border border-gray-200 shadow-sm h-fit relative">
+              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none px-2 pr-0">Sub-Inventory</span>
+              <div className="relative flex items-center">
+                <select 
+                  value={selectedSubInventory}
+                  onChange={(e) => setSelectedSubInventory(e.target.value)}
+                  className="bg-transparent text-slate-800 font-bold text-xs py-1.5 pl-2 pr-8 outline-none cursor-pointer appearance-none"
+                >
+                  <option value="ALL_STOCK">🌍 Global Total</option>
+                  <option value="WAREHOUSE">🏢 Main Warehouse</option>
+                  {users.filter(u => u.role === 'staff').map(u => (
+                    <option key={u.id} value={`SP_${u.id}`}>📍 {u.name}</option>
+                  ))}
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2 pointer-events-none" />
+              </div>
           </div>
         </div>
       </div>
@@ -172,35 +175,35 @@ export default function InventoryPage() {
       {activeTab === 'status' ? (
         <div className="grid grid-cols-1 gap-6">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Unique Items</p>
-                    <h2 className="text-3xl font-black text-slate-900">{inventory.length}</h2>
+                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                    <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Unique Items</p>
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tighter">{inventory.length}</h2>
                 </div>
-                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-amber-400">
-                    <p className="text-[10px] font-black text-amber-500 uppercase tracking-widest mb-1">Low Stock Alerts</p>
-                    <h2 className="text-3xl font-black text-slate-900">
+                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm border-l-4 border-l-amber-400">
+                    <p className="text-[10px] font-black text-amber-600 uppercase tracking-widest mb-2">Low Stock Alerts</p>
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tighter">
                         {inventory.filter(i => (i.total_quantity || 0) <= (i.reorder_level || 0)).length}
                     </h2>
                 </div>
-                <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm border-l-4 border-l-emerald-400">
-                    <p className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mb-1">Total On-Hand</p>
-                    <h2 className="text-3xl font-black text-slate-900">
+                <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-sm border-l-4 border-l-emerald-400">
+                    <p className="text-[10px] font-black text-emerald-600 uppercase tracking-widest mb-2">Total On-Hand</p>
+                    <h2 className="text-3xl font-black text-slate-900 tracking-tighter">
                         {inventory.reduce((acc, i) => Number(acc) + Number(i.total_quantity || 0), 0).toLocaleString()}
                     </h2>
                 </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="w-full text-left">
                         <thead>
                             <tr className="bg-gray-50/50 border-b border-gray-100">
-                                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Item Description</th>
-                                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Warehouse</th>
-                                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Staff Force</th>
-                                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Total</th>
-                                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status</th>
-                                <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Action</th>
+                                <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Item Description</th>
+                                <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Warehouse</th>
+                                <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Staff Force</th>
+                                <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Total</th>
+                                <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Status</th>
+                                <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-right">Action</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-50">
@@ -238,10 +241,10 @@ export default function InventoryPage() {
                                                 {rowTotal <= (item.reorder_level || 0) ? 'RESTOCK' : 'OK'}
                                             </span>
                                         </td>
-                                        <td className="px-6 py-4 text-right">
+                                        <td className="px-6 py-3 text-right">
                                             <div className="flex justify-end gap-2">
-                                                <button onClick={() => { setSelectedItem(item); setShowAssignModal(true); }} className="text-emerald-600 font-black text-[10px] uppercase tracking-widest border border-emerald-100 px-3 py-1.5 rounded-lg hover:bg-emerald-50">Move</button>
-                                                <button onClick={() => { setSelectedItem(item); setShowAdjustModal(true); }} className="text-indigo-600 font-black text-[10px] uppercase tracking-widest border border-indigo-100 px-3 py-1.5 rounded-lg hover:bg-indigo-50">Adjust</button>
+                                                <button onClick={() => { setSelectedItem(item); setShowAssignModal(true); }} className="text-emerald-600 font-black text-[10px] uppercase tracking-widest border border-emerald-200 px-3 py-1 rounded hover:bg-emerald-50 transition-colors">Move</button>
+                                                <button onClick={() => { setSelectedItem(item); setShowAdjustModal(true); }} className="text-indigo-600 font-black text-[10px] uppercase tracking-widest border border-indigo-200 px-3 py-1 rounded hover:bg-indigo-50 transition-colors">Adjust</button>
                                             </div>
                                         </td>
                                     </tr>
@@ -259,11 +262,11 @@ export default function InventoryPage() {
                 <table className="w-full text-left">
                     <thead>
                         <tr className="bg-gray-50/50 border-b border-gray-100">
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Timestamp</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Item</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Transaction</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Qty Change</th>
-                            <th className="px-6 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Notes</th>
+                            <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Timestamp</th>
+                            <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Item</th>
+                            <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Transaction</th>
+                            <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Qty Change</th>
+                            <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Notes</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-50">
@@ -295,21 +298,21 @@ export default function InventoryPage() {
       {/* Modals... Adjusted for consistency */}
       {showAssignModal && selectedItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setShowAssignModal(false)} />
-          <div className="bg-white rounded-[32px] w-full max-w-md shadow-2xl relative z-10 p-8 space-y-6">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setShowAssignModal(false)} />
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl relative z-10 p-8 space-y-6 animate-in zoom-in-95 duration-200">
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-emerald-50 rounded-2xl text-emerald-600">
-                  <Package className="w-6 h-6" />
+                <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600">
+                  <Package className="w-5 h-5" />
                 </div>
-                <h2 className="text-xl font-black text-slate-900 uppercase">Assign Stock</h2>
+                <h2 className="text-lg font-black text-slate-800 uppercase tracking-tight">Assign Stock</h2>
               </div>
               
               <div className="space-y-4">
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Recipient Staff</label>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Recipient Staff</label>
                     <select
                         required
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-sm font-bold shadow-sm outline-none"
+                        className="w-full px-4 py-2.5 bg-white border border-gray-200 rounded-lg text-sm font-bold outline-none cursor-pointer appearance-none"
                         value={selectedSalesperson}
                         onChange={e => setSelectedSalesperson(e.target.value)}
                     >
@@ -320,14 +323,14 @@ export default function InventoryPage() {
                     </select>
                   </div>
 
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">Amount to Transfer</label>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Amount to Transfer</label>
                     <input
                         type="number"
                         required
                         min="1"
                         max={selectedItem.warehouse_quantity || 0}
-                        className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-2xl font-black text-indigo-600 outline-none"
+                        className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-2xl font-black text-indigo-600 outline-none focus:ring-1 focus:ring-indigo-600/10"
                         placeholder="0"
                         value={adjustAmount || ''}
                         onChange={e => setAdjustAmount(parseInt(e.target.value) || 0)}
@@ -335,14 +338,14 @@ export default function InventoryPage() {
                   </div>
               </div>
 
-              <div className="flex gap-3">
-                <button type="button" onClick={() => setShowAssignModal(false)} className="flex-1 py-4 font-black text-slate-400 uppercase text-xs tracking-widest">Cancel</button>
+              <div className="flex gap-3 pt-4 border-t border-gray-100">
+                <button type="button" onClick={() => setShowAssignModal(false)} className="flex-1 py-2.5 font-bold text-slate-400 uppercase text-[10px] tracking-widest hover:bg-gray-50 rounded-lg transition">Cancel</button>
                 <button
                   type="submit"
                   onClick={handleAssign}
-                  className="flex-[2] py-4 font-black text-white bg-emerald-600 rounded-2xl shadow-xl shadow-emerald-100 uppercase text-xs tracking-widest"
+                  className="flex-[2] py-2.5 font-black text-white bg-emerald-600 rounded-lg shadow-lg shadow-emerald-100 uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition"
                 >
-                  Verify & Move
+                  Confirm Movement
                 </button>
               </div>
           </div>
@@ -351,25 +354,34 @@ export default function InventoryPage() {
 
       {showAdjustModal && selectedItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md" onClick={() => setShowAdjustModal(false)} />
-          <div className="bg-white rounded-[32px] w-full max-w-md shadow-2xl relative z-10 p-8 space-y-6">
-              <h2 className="text-xl font-black text-slate-900 uppercase">Adjust Inventory</h2>
-              <div className="space-y-4">
-                  <div className="grid grid-cols-2 gap-3">
-                      <button onClick={() => setAdjustType('RESTOCK')} className={`py-3 rounded-2xl font-black text-xs uppercase border ${adjustType === 'RESTOCK' ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white text-slate-400 border-slate-100'}`}>Restock</button>
-                      <button onClick={() => setAdjustType('ADJUSTMENT')} className={`py-3 rounded-2xl font-black text-xs uppercase border ${adjustType === 'ADJUSTMENT' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white text-slate-400 border-slate-100'}`}>Manual</button>
-                  </div>
-                  <input
-                    type="number"
-                    className="w-full px-4 py-3 bg-slate-50 border border-slate-100 rounded-2xl text-2xl font-black outline-none"
-                    placeholder="Quantity..."
-                    value={adjustAmount || ''}
-                    onChange={e => setAdjustAmount(parseInt(e.target.value) || 0)}
-                  />
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm" onClick={() => setShowAdjustModal(false)} />
+          <div className="bg-white rounded-2xl w-full max-w-md shadow-2xl relative z-10 p-8 space-y-6 animate-in zoom-in-95 duration-200">
+              <div className="flex items-center gap-3">
+                <div className="p-2 bg-indigo-100 rounded-lg text-indigo-600">
+                  <RefreshCw className="w-5 h-5" />
+                </div>
+                <h2 className="text-lg font-black text-slate-800 uppercase tracking-tight">Adjust Inventory</h2>
               </div>
-              <div className="flex gap-3">
-                  <button onClick={() => setShowAdjustModal(false)} className="flex-1 py-4 font-black text-slate-400 uppercase text-xs">Close</button>
-                  <button onClick={handleAdjust} className="flex-[2] py-4 bg-indigo-600 text-white rounded-2xl font-black uppercase text-xs shadow-xl shadow-indigo-100">Apply Filter</button>
+
+              <div className="space-y-4">
+                  <div className="grid grid-cols-2 gap-2 p-1 bg-gray-50 rounded-lg border border-gray-100">
+                      <button onClick={() => setAdjustType('RESTOCK')} className={`py-2 rounded-md font-black text-[10px] uppercase tracking-wider transition-all ${adjustType === 'RESTOCK' ? 'bg-white text-emerald-600 shadow-sm border border-emerald-100' : 'text-slate-400 hover:text-slate-600'}`}>Restock</button>
+                      <button onClick={() => setAdjustType('ADJUSTMENT')} className={`py-2 rounded-md font-black text-[10px] uppercase tracking-wider transition-all ${adjustType === 'ADJUSTMENT' ? 'bg-white text-indigo-600 shadow-sm border border-indigo-100' : 'text-slate-400 hover:text-slate-600'}`}>Manual</button>
+                  </div>
+                  <div className="space-y-1.5">
+                    <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Quantity</label>
+                    <input
+                      type="number"
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-lg text-2xl font-black outline-none focus:ring-1 focus:ring-indigo-600/10"
+                      placeholder="0"
+                      value={adjustAmount || ''}
+                      onChange={e => setAdjustAmount(parseInt(e.target.value) || 0)}
+                    />
+                  </div>
+              </div>
+              <div className="flex gap-3 pt-4 border-t border-gray-100">
+                  <button onClick={() => setShowAdjustModal(false)} className="flex-1 py-2.5 font-bold text-slate-400 uppercase text-[10px] tracking-widest hover:bg-gray-50 rounded-lg transition">Dismiss</button>
+                  <button onClick={handleAdjust} className="flex-[2] py-2.5 bg-indigo-600 text-white rounded-lg font-black uppercase text-[10px] tracking-widest shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition">Commit Update</button>
               </div>
           </div>
         </div>

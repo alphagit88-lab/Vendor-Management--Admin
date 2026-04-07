@@ -256,106 +256,119 @@ export default function CustomersPage() {
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => setShowModal(false)} />
           <div className="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
             <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white">
-              <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-                {isEdit ? 'Edit Customer Details' : 'Add New Customer'}
-              </h2>
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald-600">
+                  <Building2 className="w-4 h-4" />
+                </div>
+                <h2 className="text-xl font-black tracking-tight text-slate-900 uppercase">
+                  {isEdit ? 'Update Customer Node' : 'Register Retailer'}
+                </h2>
+              </div>
               <button className="p-2 bg-gray-50 hover:bg-gray-100 rounded-full transition" onClick={() => setShowModal(false)}>
                 <X className="w-5 h-5 text-gray-500" />
               </button>
             </div>
 
             <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6 flex-1 overflow-y-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Business Identity</h3>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Registered Company Name</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="Legal Entity Name"
-                      value={formData.registered_company_name} onChange={e => setFormData({ ...formData, registered_company_name: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">DBA (Doing Business As)</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="Store Front Name"
-                      value={formData.dba} onChange={e => setFormData({ ...formData, dba: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Account Number</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-100 border border-gray-100 text-gray-500 rounded-xl text-sm" placeholder="Automatically Generated" disabled
-                      value={formData.account_id} />
-                    <p className="text-[10px] text-amber-600 mt-1 font-medium italic">Auto-generated</p>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Contact & Location</h3>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Physical Address</label>
-                    <textarea className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition resize-none h-20 text-sm font-medium outline-none" placeholder="Enter complete address..." required
-                      value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Email Address</label>
-                    <input type="email" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="contact@customer.com"
-                      value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Phone Number</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="(555) 000-0000"
-                      value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Compliance & Finance</h3>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Sales Tax ID</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-mono outline-none" placeholder="Tax Identification Number"
-                      value={formData.sales_tax_id} onChange={e => setFormData({ ...formData, sales_tax_id: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">Payment Type</label>
-                    <select className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-bold outline-none"
-                      value={formData.payment_type} onChange={e => setFormData({ ...formData, payment_type: e.target.value })}>
-                      <option value="COD">COD (Cash on Delivery)</option>
-                      <option value="EFT">EFT (Electronic Funds Transfer)</option>
-                    </select>
-                  </div>
-                  <div className="p-4 bg-gray-50 rounded-2xl border border-gray-100">
-                    <div className="flex items-center gap-3 mb-3">
-                      <input type="checkbox" id="tobacco" className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500"
-                        checked={formData.has_cigarette_permit} onChange={e => setFormData({ ...formData, has_cigarette_permit: e.target.checked })} />
-                      <label htmlFor="tobacco" className="text-sm font-bold text-slate-700 cursor-pointer">Cigarette / Tobacco Permit</label>
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Business Identity</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Registered Company Name</label>
+                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg transition text-sm font-medium outline-none" placeholder="Legal Entity Name"
+                        value={formData.registered_company_name} onChange={e => setFormData({ ...formData, registered_company_name: e.target.value })} />
                     </div>
-                    {formData.has_cigarette_permit && (
-                      <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
-                        <div>
-                          <label className="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Permit Number</label>
-                          <input type="text" className="w-full px-3 py-2 bg-white border border-gray-100 focus:border-emerald-500 rounded-lg text-sm font-medium outline-none" placeholder="Permit #"
-                            value={formData.tobacco_permit_number} onChange={e => setFormData({ ...formData, tobacco_permit_number: e.target.value })} />
-                        </div>
-                        <div>
-                          <label className="block text-[10px] font-bold text-slate-500 mb-1 uppercase">Expiry Date</label>
-                          <input type="date" className="w-full px-3 py-2 bg-white border border-gray-100 focus:border-emerald-500 rounded-lg text-sm font-medium outline-none"
-                            value={formData.tobacco_expire_date} onChange={e => setFormData({ ...formData, tobacco_expire_date: e.target.value })} />
-                        </div>
-                      </div>
-                    )}
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">DBA (Doing Business As)</label>
+                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg transition text-sm font-medium outline-none" placeholder="Store Front Name"
+                        value={formData.dba} onChange={e => setFormData({ ...formData, dba: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Account Number</label>
+                      <input type="text" className="w-full px-4 py-2 bg-slate-50 border border-gray-200 text-slate-400 rounded-lg text-sm font-mono" placeholder="Automatically Generated" disabled
+                        value={formData.account_id} />
+                      <p className="text-[10px] text-amber-600 mt-1 font-black uppercase tracking-tight italic">Auto-generated System ID</p>
+                    </div>
                   </div>
                 </div>
 
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider">Additional Meta</h3>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-500 mb-1 uppercase">General Permit Notes</label>
-                    <input type="text" className="w-full px-4 py-2.5 bg-gray-50 border border-gray-100 focus:bg-white focus:border-emerald-500 rounded-xl transition text-sm font-medium outline-none" placeholder="Other permits or regulatory info"
-                      value={formData.permit_numbers} onChange={e => setFormData({ ...formData, permit_numbers: e.target.value })} />
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Contact & Logistics</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Physical Address</label>
+                      <textarea className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg transition resize-none h-20 text-sm font-medium outline-none" placeholder="Enter complete address..." required
+                        value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Email Address</label>
+                      <input type="email" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg transition text-sm font-medium outline-none" placeholder="contact@customer.com"
+                        value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Phone Number</label>
+                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg transition text-sm font-medium outline-none" placeholder="(555) 000-0000"
+                        value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Compliance & Settlement</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Sales Tax ID</label>
+                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg transition text-sm font-mono outline-none" placeholder="Tax Identification Number"
+                        value={formData.sales_tax_id} onChange={e => setFormData({ ...formData, sales_tax_id: e.target.value })} />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Settlement Type</label>
+                      <select className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg transition text-sm font-black outline-none appearance-none cursor-pointer"
+                        value={formData.payment_type} onChange={e => setFormData({ ...formData, payment_type: e.target.value })}>
+                        <option value="COD">COD (Cash on Delivery)</option>
+                        <option value="EFT">EFT (Electronic Funds Transfer)</option>
+                      </select>
+                    </div>
+                    <div className="p-4 bg-slate-50 rounded-xl border border-gray-100">
+                      <div className="flex items-center gap-3 mb-3">
+                        <input type="checkbox" id="tobacco" className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-600 transition cursor-pointer"
+                          checked={formData.has_cigarette_permit} onChange={e => setFormData({ ...formData, has_cigarette_permit: e.target.checked })} />
+                        <label htmlFor="tobacco" className="text-[11px] font-black text-slate-700 cursor-pointer uppercase tracking-wider">Tobacco Regulatory Permit</label>
+                      </div>
+                      {formData.has_cigarette_permit && (
+                        <div className="space-y-4 animate-in fade-in slide-in-from-top-2 duration-300">
+                          <div>
+                            <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase tracking-widest">Permit Number</label>
+                            <input type="text" className="w-full px-3 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg text-xs font-mono outline-none" placeholder="Permit #"
+                              value={formData.tobacco_permit_number} onChange={e => setFormData({ ...formData, tobacco_permit_number: e.target.value })} />
+                          </div>
+                          <div>
+                            <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase tracking-widest">Expiration Milestone</label>
+                            <input type="date" className="w-full px-3 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg text-xs font-medium outline-none"
+                              value={formData.tobacco_expire_date} onChange={e => setFormData({ ...formData, tobacco_expire_date: e.target.value })} />
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Auxiliary Parameters</h3>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Regulatory Metadata</label>
+                      <textarea className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg transition resize-none h-24 text-sm font-medium outline-none" placeholder="Other permits or regulatory info"
+                        value={formData.permit_numbers} onChange={e => setFormData({ ...formData, permit_numbers: e.target.value })} />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="pt-6 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
-                <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-semibold text-slate-600 rounded-xl hover:bg-gray-50 transition">Dismiss</button>
-                <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 shadow-md transition disabled:opacity-50">
-                  {submitting ? (isEdit ? 'Updating...' : 'Saving...') : (isEdit ? 'Update Customer' : 'Save Customer')}
+              <div className="pt-8 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
+                <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-bold text-slate-500 rounded-lg hover:bg-gray-50 transition uppercase text-[10px] tracking-widest">Cancel</button>
+                <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-emerald-600 text-white font-black rounded-lg hover:bg-emerald-700 shadow-lg shadow-emerald-100 transition disabled:opacity-50 uppercase text-[10px] tracking-widest">
+                  {submitting ? (isEdit ? 'Updating Node...' : 'Registering...') : (isEdit ? 'Update Record' : 'Commit Registry')}
                 </button>
               </div>
             </form>
