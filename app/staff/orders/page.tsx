@@ -1,12 +1,19 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { ShoppingCart, Search, Plus, Filter, Clock, CheckCircle2, ChevronRight, UserCircle } from 'lucide-react';
+import { ShoppingCart, Search, Plus, Filter, Clock, CheckCircle2, ChevronRight, UserCircle, Eye } from 'lucide-react';
 import { API_URL } from '@/lib/config';
+import OrderDetailsModal from '@/components/OrderDetailsModal';
 
 export default function StaffOrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  // Details Modal state
+  const [selectedOrder, setSelectedOrder] = useState<any>(null);
+  const [showDetails, setShowDetails] = useState(false);
+  const [isFetchingDetail, setIsFetchingDetail] = useState(false);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -25,19 +32,39 @@ export default function StaffOrdersPage() {
     }
   };
 
+  const handleViewDetails = async (id: number) => {
+    setIsFetchingDetail(true);
+    try {
+      const res = await fetch(`${API_URL}/orders/${id}`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSelectedOrder(data.data);
+        setShowDetails(true);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsFetchingDetail(false);
+    }
+  };
+
   useEffect(() => {
     fetchOrders();
   }, []);
 
   const filteredOrders = orders.filter(o => {
-    if (filter === 'all') return true;
-    return o.status === filter;
+    const matchesFilter = filter === 'all' || o.status === filter;
+    const matchesSearch = o.order_number?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         o.customer_name?.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesFilter && matchesSearch;
   });
 
   if (loading) {
     return (
       <div className="p-8 animate-in fade-in duration-700 max-w-[1200px] mx-auto">
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-24 flex flex-col items-center justify-center space-y-6">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-24 flex flex-col items-center justify-center space-y-6">
           <div className="w-16 h-16 border-4 border-slate-50 border-t-indigo-600 rounded-full animate-spin" />
           <p className="text-xs font-black text-slate-300 uppercase tracking-widest leading-none text-center">Reconstructing Sales Pipeline...</p>
         </div>
@@ -53,12 +80,12 @@ export default function StaffOrdersPage() {
           <p className="text-slate-500 mt-1 font-bold uppercase tracking-wider text-xs">Tracking your regional revenue generation streams.</p>
         </div>
         
-        <div className="flex bg-white p-1 rounded-2xl shadow-sm border border-slate-100">
+        <div className="flex bg-white p-1 rounded-lg shadow-sm border border-slate-100">
             {['all', 'pending', 'completed'].map(f => (
                 <button
                     key={f}
                     onClick={() => setFilter(f)}
-                    className={`px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${filter === f ? 'bg-indigo-600 text-white shadow-md shadow-indigo-100' : 'text-slate-400 hover:text-slate-600'}`}
+                    className={`px-6 py-2 rounded-md text-[11px] font-black uppercase tracking-widest transition-all ${filter === f ? 'bg-indigo-600 text-white shadow-md shadow-indigo-100' : 'text-slate-400 hover:text-slate-600'}`}
                 >
                     {f}
                 </button>
@@ -66,11 +93,17 @@ export default function StaffOrdersPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-3xl shadow-xl shadow-slate-100/50 border border-slate-100 overflow-hidden">
-        <div className="p-4 border-b border-slate-50 flex items-center bg-slate-50/30">
+      <div className="bg-white rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+        <div className="p-4 border-b border-slate-50 flex items-center bg-slate-50/50">
           <div className="relative w-full max-w-sm">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <input type="text" placeholder="Search my orders..." className="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-2xl text-sm font-bold focus:ring-2 focus:ring-indigo-500/10 outline-none transition-all" />
+            <input 
+              type="text" 
+              placeholder="Search by Order # or Shop..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-white border border-slate-200 rounded-lg text-sm font-bold focus:ring-1 focus:ring-indigo-500/20 outline-none transition-all" 
+            />
           </div>
         </div>
 
@@ -78,11 +111,11 @@ export default function StaffOrdersPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-slate-50/50 border-b border-slate-100">
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Order Reference</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Customer Entity</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-center">Net Revenue</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest">Status Matrix</th>
-                <th className="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-widest text-right">Access</th>
+                <th className="px-8 py-5 text-[11px] font-black text-slate-400 uppercase tracking-widest">Order Reference</th>
+                <th className="px-8 py-5 text-[11px] font-black text-slate-400 uppercase tracking-widest">Customer Entity</th>
+                <th className="px-8 py-5 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Net Revenue</th>
+                <th className="px-8 py-5 text-[11px] font-black text-slate-400 uppercase tracking-widest">Status Matrix</th>
+                <th className="px-8 py-5 text-[11px] font-black text-slate-400 uppercase tracking-widest text-right">Access</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
@@ -115,8 +148,12 @@ export default function StaffOrdersPage() {
                     )}
                   </td>
                   <td className="px-8 py-5 text-right">
-                    <button className="p-2 bg-slate-50 group-hover:bg-white rounded-xl border border-transparent group-hover:border-slate-100 shadow-sm transition-all">
-                        <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-indigo-500" />
+                    <button 
+                      onClick={() => handleViewDetails(order.id)}
+                      disabled={isFetchingDetail}
+                      className="p-2 bg-slate-50 group-hover:bg-indigo-600 rounded-lg border border-slate-200 group-hover:border-indigo-600 shadow-sm transition-all group-hover:text-white"
+                    >
+                        <Eye className="w-4 h-4 text-slate-400 group-hover:text-white" />
                     </button>
                   </td>
                 </tr>
@@ -138,6 +175,13 @@ export default function StaffOrdersPage() {
           </table>
         </div>
       </div>
+      
+      <OrderDetailsModal 
+        isOpen={showDetails}
+        onClose={() => setShowDetails(false)}
+        order={selectedOrder}
+        onUpdate={fetchOrders}
+      />
     </div>
   );
 }
