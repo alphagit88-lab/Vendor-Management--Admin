@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, Edit, X, Search, Layers, ChevronRight } from 'lucide-react';
+import { Plus, Trash2, Edit, X,Layers, ChevronRight } from 'lucide-react';
 import { API_URL } from '@/lib/config';
 
 export default function CategoriesPage() {
@@ -11,6 +11,7 @@ export default function CategoriesPage() {
   const [isEdit, setIsEdit] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
 
+  // Fetch categories from API
   const fetchCategories = async () => {
     try {
       const res = await fetch(`${API_URL}/categories`, {
