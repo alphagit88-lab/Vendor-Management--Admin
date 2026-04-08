@@ -140,7 +140,7 @@ export default function ItemsPage() {
 
   if (loading && items.length === 0) {
     return (
-      <div className="p-8 animate-in fade-in duration-700 max-w-[1600px] mx-auto">
+      <div className="p-8 animate-in fade-in duration-700 max-w-400 mx-auto">
         <div className="flex justify-between items-center mb-12 gap-6">
           <div className="space-y-3">
             <div className="h-10 w-64 bg-slate-100 rounded-2xl animate-pulse" />

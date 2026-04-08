@@ -151,7 +151,7 @@ export default function StaffCustomersPage() {
 
   if (loading) {
     return (
-      <div className="p-8 animate-in fade-in duration-700 max-w-[1200px] mx-auto">
+      <div className="p-8 animate-in fade-in duration-700 max-w-300 mx-auto">
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-24 flex flex-col items-center justify-center space-y-6">
           <div className="relative">
             <div className="w-16 h-16 border-4 border-slate-50 border-t-indigo-600 rounded-full animate-spin" />
@@ -164,7 +164,7 @@ export default function StaffCustomersPage() {
   }
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-[1400px] mx-auto space-y-10">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-350 mx-auto space-y-10">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
         <div>
           <h1 className="text-3xl font-black text-slate-900 tracking-tight uppercase">Sales Portal: Map View</h1>
@@ -175,7 +175,7 @@ export default function StaffCustomersPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {customers.map(customer => (
           <div key={customer.id} className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative group overflow-hidden">
-            <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-indigo-500/5 to-transparent rounded-bl-full group-hover:scale-150 transition-transform duration-500" />
+            <div className="absolute top-0 right-0 w-24 h-24 bg-linear-to-br from-indigo-500/5 to-transparent rounded-bl-full group-hover:scale-150 transition-transform duration-500" />
             
             <div className="flex items-start justify-between mb-6 relative z-10">
                 <div className="p-3 bg-indigo-50 rounded-2xl text-indigo-600 group-hover:bg-indigo-600 group-hover:text-white transition-colors duration-300">
@@ -264,7 +264,7 @@ export default function StaffCustomersPage() {
               </div>
             </div>
 
-            <div className="w-full md:w-[400px] flex flex-col bg-white">
+            <div className="w-full md:w-100 flex flex-col bg-white">
                <div className="p-8 border-b border-slate-100 flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-indigo-600 text-white rounded-2xl shadow-lg shadow-indigo-100">
@@ -358,7 +358,7 @@ export default function StaffCustomersPage() {
       )}
 
       {showInvoice && lastInvoiceData && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-60 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-3xl" />
           <div className="bg-white rounded-[2.5rem] w-full max-w-2xl shadow-2xl relative z-10 overflow-hidden flex flex-col p-12 transition-all">
             

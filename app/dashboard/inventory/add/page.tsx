@@ -116,7 +116,7 @@ export default function AddInventoryPage() {
         <div className={`p-4 rounded-xl flex items-center gap-3 shadow-sm border ${
           status.type === 'success' ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-red-50 border-red-200 text-red-800'
         }`}>
-          {status.type === 'success' ? <CheckCircle2 className="w-5 h-5 flex-shrink-0" /> : <AlertCircle className="w-5 h-5 flex-shrink-0" />}
+          {status.type === 'success' ? <CheckCircle2 className="w-5 h-5 shrink-0" /> : <AlertCircle className="w-5 h-5 shrink-0" />}
           <span className="font-medium text-[15px]">{status.message}</span>
         </div>
       )}
@@ -137,7 +137,7 @@ export default function AddInventoryPage() {
               <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
             </div>
           </div>
-          <div className="p-2 max-h-[400px] overflow-y-auto">
+          <div className="p-2 max-h-100 overflow-y-auto">
             {loading ? (
               <div className="flex flex-col items-center justify-center p-12 text-slate-400 gap-4">
                 <RefreshCw className="w-8 h-8 animate-spin" strokeWidth={1.5} />

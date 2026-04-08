@@ -63,7 +63,7 @@ export default function StaffOrdersPage() {
 
   if (loading) {
     return (
-      <div className="p-8 animate-in fade-in duration-700 max-w-[1200px] mx-auto">
+      <div className="p-8 animate-in fade-in duration-700 max-w-300 mx-auto">
         <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-24 flex flex-col items-center justify-center space-y-6">
           <div className="w-16 h-16 border-4 border-slate-50 border-t-indigo-600 rounded-full animate-spin" />
           <p className="text-xs font-black text-slate-300 uppercase tracking-widest leading-none text-center">Reconstructing Sales Pipeline...</p>
@@ -73,7 +73,7 @@ export default function StaffOrdersPage() {
   }
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-[1400px] mx-auto space-y-10">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-350 mx-auto space-y-10">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
         <div>
           <h1 className="text-3xl font-black text-slate-900 tracking-tight uppercase">My Sales Orders</h1>
