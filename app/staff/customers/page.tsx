@@ -3,9 +3,11 @@
 import { useState, useEffect } from 'react';
 import { 
   Users, Building2, MapPin, Phone, ChevronRight, Search, 
-  Plus, Minus, X, ShoppingCart, Receipt, Package, CheckCircle2, History
+  Plus, Minus, X, ShoppingCart, Receipt, Package, CheckCircle2, History,
+  Map as MapIcon
 } from 'lucide-react';
 import { API_URL } from '@/lib/config';
+import MapPicker from '@/components/MapPicker';
 
 export default function StaffCustomersPage() {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -22,6 +24,10 @@ export default function StaffCustomersPage() {
   // Invoice View
   const [showInvoice, setShowInvoice] = useState(false);
   const [lastInvoiceData, setLastInvoiceData] = useState<any>(null);
+  
+  // Location View
+  const [showMapModal, setShowMapModal] = useState(false);
+  const [locationCustomer, setLocationCustomer] = useState<any>(null);
 
   useEffect(() => {
     fetchData();
@@ -201,13 +207,21 @@ export default function StaffCustomersPage() {
             </div>
 
             <div className="mt-8 flex items-center justify-between relative z-10">
-                <span className="px-3 py-1 rounded-full bg-slate-50 text-[9px] font-black text-slate-400 uppercase tracking-[0.2em]">{customer.payment_type || 'COD'} TERMS</span>
-                <button 
-                    onClick={() => { setSelectedCustomer(customer); setShowSaleModal(true); }}
-                    className="flex items-center gap-1 text-[10px] font-black text-indigo-500 uppercase tracking-widest hover:text-indigo-700 transition-colors"
-                >
-                    Initiate Sale <ChevronRight className="w-3 h-3" />
-                </button>
+                <div className="flex items-center gap-2">
+                    <button 
+                        onClick={() => { setLocationCustomer(customer); setShowMapModal(true); }}
+                        className="p-2 bg-slate-50 text-slate-400 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl transition-all"
+                        title="View Location"
+                    >
+                        <MapIcon className="w-4 h-4" />
+                    </button>
+                    <button 
+                        onClick={() => { setSelectedCustomer(customer); setShowSaleModal(true); }}
+                        className="flex-1 flex items-center justify-center gap-1 py-2 px-3 bg-indigo-50 text-[10px] font-black text-indigo-500 uppercase tracking-widest hover:bg-indigo-600 hover:text-white rounded-xl transition-all"
+                    >
+                        Initiate Sale <ChevronRight className="w-3 h-3" />
+                    </button>
+                </div>
             </div>
           </div>
         ))}
@@ -449,6 +463,59 @@ export default function StaffCustomersPage() {
                >
                  Download / Print Bill
                </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showMapModal && locationCustomer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-md" onClick={() => setShowMapModal(false)} />
+          <div className="bg-white rounded-[2.5rem] w-full max-w-2xl shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-300">
+            <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-white">
+                <div className="flex items-center gap-4">
+                    <div className="p-3 bg-emerald-100 text-emerald-600 rounded-2xl">
+                        <MapIcon className="w-6 h-6" />
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-black text-slate-900 uppercase tracking-tighter">{locationCustomer.dba}</h3>
+                        <p className="text-xs font-bold text-slate-400 uppercase tracking-wide">Delivery Coordinates</p>
+                    </div>
+                </div>
+                <button onClick={() => setShowMapModal(false)} className="p-2 hover:bg-slate-50 rounded-xl transition text-slate-300">
+                    <X className="w-5 h-5" />
+                </button>
+            </div>
+            <div className="p-8 space-y-6">
+                <div className="rounded-[2rem] overflow-hidden border border-slate-100 shadow-inner bg-slate-50">
+                    {locationCustomer.latitude && locationCustomer.longitude ? (
+                        <MapPicker 
+                            lat={parseFloat(locationCustomer.latitude)} 
+                            lng={parseFloat(locationCustomer.longitude)} 
+                            readOnly={true} 
+                        />
+                    ) : (
+                        <div className="h-[300px] flex flex-col items-center justify-center text-slate-400 space-y-2">
+                            <MapPin className="w-12 h-12 opacity-20" />
+                            <p className="text-sm font-black uppercase tracking-widest">No Coordinates Set</p>
+                            <p className="text-[10px] font-bold uppercase tracking-widest opacity-50">Contact admin to update location data.</p>
+                        </div>
+                    )}
+                </div>
+                <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 flex items-start gap-4">
+                    <MapPin className="w-5 h-5 text-indigo-500 mt-1" />
+                    <div className="flex-1">
+                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Physical Address</p>
+                        <p className="text-sm font-bold text-slate-700 leading-relaxed uppercase">{locationCustomer.address}</p>
+                    </div>
+                </div>
+            </div>
+            <div className="p-8 pt-0">
+                <button 
+                    onClick={() => setShowMapModal(false)}
+                    className="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-slate-800 transition"
+                >
+                    Close Map View
+                </button>
             </div>
           </div>
         </div>
