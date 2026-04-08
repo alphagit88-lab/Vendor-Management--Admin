@@ -52,7 +52,7 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onUpdate }: 
       <div className="bg-white rounded-[2.5rem] w-full max-w-4xl shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-300 max-h-[90vh]">
         
         {/* Header */}
-        <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-slate-50 to-white">
+        <div className="p-8 border-b border-slate-100 flex items-center justify-between bg-linear-to-r from-slate-50 to-white">
           <div className="flex items-center gap-4">
             <div className="p-3.5 bg-blue-600 text-white rounded-2xl shadow-xl shadow-blue-100">
               <Receipt className="w-6 h-6" />
@@ -127,7 +127,7 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onUpdate }: 
               <span className="text-[10px] font-black text-slate-400 bg-slate-50 px-2.5 py-1 rounded-full uppercase tracking-widest">{order.items?.length || 0} Products</span>
             </div>
             
-            <div className="border border-slate-100 rounded-[2rem] overflow-hidden shadow-sm bg-white">
+            <div className="border border-slate-100 rounded-4xl overflow-hidden shadow-sm bg-white">
               <table className="w-full text-left">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-100">
@@ -163,7 +163,7 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onUpdate }: 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="space-y-3">
               <span className="text-[11px] font-black text-slate-300 uppercase tracking-[0.2em]">Transaction Ledger Notes</span>
-              <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100 min-h-[120px] text-xs font-medium text-slate-600 leading-relaxed italic">
+              <div className="p-6 bg-slate-50 rounded-3xl border border-slate-100 min-h-30 text-xs font-medium text-slate-600 leading-relaxed italic">
                 {order.notes || "No additional transaction notes documented in the ledger."}
               </div>
             </div>
