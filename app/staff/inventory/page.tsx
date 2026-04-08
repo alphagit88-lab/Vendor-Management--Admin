@@ -56,7 +56,7 @@ export default function StaffInventoryPage() {
 
   if (loading) {
     return (
-      <div className="p-8 animate-in fade-in duration-700 max-w-[1200px] mx-auto">
+      <div className="p-8 animate-in fade-in duration-700 max-w-300 mx-auto">
         <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-24 flex flex-col items-center justify-center space-y-6">
           <div className="w-16 h-16 border-4 border-slate-50 border-t-indigo-600 rounded-full animate-spin" />
           <p className="text-xs font-black text-slate-300 uppercase tracking-widest leading-none text-center italic">Synchronizing Localized Stock Data...</p>
@@ -66,7 +66,7 @@ export default function StaffInventoryPage() {
   }
 
   return (
-    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-[1400px] mx-auto space-y-8">
+    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 max-w-350 mx-auto space-y-8">
       {/* Header with Tabs */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
         <div>

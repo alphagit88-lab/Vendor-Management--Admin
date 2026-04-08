@@ -128,7 +128,7 @@ export default function CustomersPage() {
 
   if (loading && customers.length === 0) {
     return (
-      <div className="p-8 animate-in fade-in duration-700 max-w-[1600px] mx-auto">
+      <div className="p-8 animate-in fade-in duration-700 max-w-400 mx-auto">
         <div className="flex justify-between items-center mb-12 gap-6">
           <div className="space-y-3">
             <div className="h-10 w-64 bg-slate-100 rounded-2xl animate-pulse" />
@@ -188,7 +188,7 @@ export default function CustomersPage() {
         </div>
 
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[800px] text-left border-collapse">
+          <table className="w-full min-w-200 text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left">Account #</th>

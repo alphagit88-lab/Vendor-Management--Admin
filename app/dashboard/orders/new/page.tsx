@@ -159,7 +159,7 @@ export default function NewOrderPage() {
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex-1 min-h-[400px]">
+          <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex-1 min-h-100">
             <div className="flex items-center gap-3 mb-6">
               <Package className="w-5 h-5 text-blue-600" />
               <h2 className="text-lg font-bold text-slate-900">2. Catalog Selection</h2>
@@ -185,7 +185,7 @@ export default function NewOrderPage() {
 
         {/* Summary Area */}
         <div className="lg:col-span-1">
-          <div className="bg-slate-900 rounded-3xl p-6 text-white shadow-xl sticky top-8 flex flex-col h-[600px]">
+          <div className="bg-slate-900 rounded-3xl p-6 text-white shadow-xl sticky top-8 flex flex-col h-150">
             <div className="flex items-center gap-3 mb-8 border-b border-slate-800 pb-6">
               <ShoppingCart className="w-6 h-6 text-blue-400" />
               <h2 className="text-xl font-bold">Order Summary</h2>
@@ -211,7 +211,7 @@ export default function NewOrderPage() {
                       <button onClick={() => updateQuantity(oi.item_id, oi.quantity - 1)} className="p-1 hover:text-blue-400 text-slate-400 transition">
                         <Minus className="w-3 h-3" />
                       </button>
-                      <span className="text-sm font-bold min-w-[20px] text-center">{oi.quantity}</span>
+                      <span className="text-sm font-bold min-w-5 text-center">{oi.quantity}</span>
                       <button onClick={() => updateQuantity(oi.item_id, oi.quantity + 1)} className="p-1 hover:text-blue-400 text-slate-400 transition">
                         <Plus className="w-3 h-3" />
                       </button>

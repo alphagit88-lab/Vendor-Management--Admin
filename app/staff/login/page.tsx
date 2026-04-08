@@ -46,7 +46,7 @@ export default function StaffLogin() {
   return (
     <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2 bg-gray-50 font-sans">
       <div className="hidden lg:flex flex-col justify-center items-center bg-[#0f172a] text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/50 to-slate-900 pointer-events-none" />
+        <div className="absolute inset-0 bg-linear-to-br from-indigo-900/50 to-slate-900 pointer-events-none" />
         <div className="z-10 max-w-lg px-8 flex flex-col items-center justify-center">
           <div className="w-full h-40 relative px-4">
             <Image 

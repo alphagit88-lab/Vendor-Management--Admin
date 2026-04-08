@@ -123,7 +123,7 @@ export default function CategoriesPage() {
               </div>
             </div>
             <h3 className="text-xl font-bold text-slate-900 mb-2 truncate">{cat.name}</h3>
-            <p className="text-sm text-slate-500 line-clamp-2 min-h-[40px] leading-relaxed mb-6">
+            <p className="text-sm text-slate-500 line-clamp-2 min-h-10 leading-relaxed mb-6">
               {cat.description || 'No specialized parameters defined for this classification node.'}
             </p>
             <div className="flex items-center justify-between pt-4 border-t border-gray-50">
@@ -190,7 +190,7 @@ export default function CategoriesPage() {
 
               <div className="flex gap-4">
                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-4 font-bold text-slate-500 bg-slate-50 rounded-2xl hover:bg-slate-100 transition-colors">Abort</button>
-                <button type="submit" disabled={loading} className="flex-[2] py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all hover:-translate-y-0.5 disabled:opacity-50">
+                <button type="submit" disabled={loading} className="flex-2 py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all hover:-translate-y-0.5 disabled:opacity-50">
                   {loading ? 'Committing...' : (isEdit ? 'Update Node' : 'Commit Node')}
                 </button>
               </div>

@@ -47,7 +47,7 @@ export default function DashboardPage() {
 
   if (loading && stats.users.value === 0) {
     return (
-      <div className="p-8 animate-in fade-in duration-700 max-w-[1600px] mx-auto space-y-12">
+      <div className="p-8 animate-in fade-in duration-700 max-w-400 mx-auto space-y-12">
         <div className="flex justify-between items-center gap-6">
           <div className="space-y-3">
             <div className="h-10 w-72 bg-slate-100 rounded-2xl animate-pulse" />
@@ -103,7 +103,7 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat, idx) => (
           <div key={idx} className={`relative overflow-hidden bg-white p-6 rounded-2xl border border-gray-100 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] transition-all duration-300 hover:shadow-lg hover:-translate-y-1`}>
-            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${stat.color} opacity-[0.03] rounded-bl-full -z-10`} />
+            <div className={`absolute top-0 right-0 w-32 h-32 bg-linear-to-br ${stat.color} opacity-[0.03] rounded-bl-full -z-10`} />
             <div className="flex items-center justify-between mb-4">
               <div className={`p-3 ${stat.bg} rounded-xl`}>
                 <stat.icon className={`w-6 h-6 text-slate-700`} strokeWidth={2} />
