@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Plus, Users, Search, Edit, Trash2, X, MapPin, Phone, Building2 } from 'lucide-react';
 import { API_URL } from '@/lib/config';
 import ConfirmModal from '@/components/ConfirmModal';
+import MapPicker from '@/components/MapPicker';
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState<any[]>([]);
@@ -10,7 +11,8 @@ export default function CustomersPage() {
   const [formData, setFormData] = useState({
     address: '', phone: '', account_id: '', permit_numbers: '',
     registered_company_name: '', dba: '', email: '', sales_tax_id: '',
-    has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD'
+    has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD',
+    latitude: undefined as number | undefined, longitude: undefined as number | undefined
   });
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -53,7 +55,11 @@ export default function CustomersPage() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          latitude: formData.latitude ? parseFloat(formData.latitude.toString()) : null,
+          longitude: formData.longitude ? parseFloat(formData.longitude.toString()) : null
+        })
       });
       const data = await res.json();
       if (data.success) {
@@ -62,7 +68,8 @@ export default function CustomersPage() {
         setFormData({
           address: '', phone: '', account_id: '', permit_numbers: '',
           registered_company_name: '', dba: '', email: '', sales_tax_id: '',
-          has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD'
+          has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD',
+          latitude: undefined, longitude: undefined
         });
         setIsEdit(false);
         setEditId(null);
@@ -89,7 +96,9 @@ export default function CustomersPage() {
       has_cigarette_permit: customer.has_cigarette_permit || false,
       tobacco_permit_number: customer.tobacco_permit_number || '',
       tobacco_expire_date: customer.tobacco_expire_date ? new Date(customer.tobacco_expire_date).toISOString().split('T')[0] : '',
-      payment_type: customer.payment_type || 'COD'
+      payment_type: customer.payment_type || 'COD',
+      latitude: customer.latitude ? parseFloat(customer.latitude) : undefined,
+      longitude: customer.longitude ? parseFloat(customer.longitude) : undefined
     });
     setEditId(customer.id);
     setIsEdit(true);
@@ -164,7 +173,8 @@ export default function CustomersPage() {
             setFormData({
               address: '', phone: '', account_id: '', permit_numbers: '',
               registered_company_name: '', dba: '', email: '', sales_tax_id: '',
-              has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD'
+              has_cigarette_permit: false, tobacco_permit_number: '', tobacco_expire_date: '', payment_type: 'COD',
+              latitude: undefined, longitude: undefined
             });
             setShowModal(true);
           }}
@@ -361,6 +371,30 @@ export default function CustomersPage() {
                       <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Regulatory Metadata</label>
                       <textarea className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600/10 rounded-lg transition resize-none h-24 text-sm font-medium outline-none" placeholder="Other permits or regulatory info"
                         value={formData.permit_numbers} onChange={e => setFormData({ ...formData, permit_numbers: e.target.value })} />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="md:col-span-2 space-y-4 pt-6 border-t border-gray-100">
+                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Geographic Coordinates</h3>
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div className="lg:col-span-2">
+                       <MapPicker 
+                        lat={formData.latitude} 
+                        lng={formData.longitude} 
+                        onChange={(lat, lng) => setFormData(prev => ({ ...prev, latitude: lat, longitude: lng }))} 
+                       />
+                       <p className="text-[9px] text-slate-400 mt-2 italic font-medium uppercase tracking-widest">Click on map to pin precise delivery coordinates.</p>
+                    </div>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase tracking-widest">Latitude</label>
+                        <input type="text" readOnly className="w-full px-3 py-2 bg-slate-50 border border-gray-200 rounded-lg text-xs font-mono text-slate-500" value={formData.latitude || 'Not set'} />
+                      </div>
+                      <div>
+                        <label className="block text-[9px] font-black text-slate-400 mb-1 uppercase tracking-widest">Longitude</label>
+                        <input type="text" readOnly className="w-full px-3 py-2 bg-slate-50 border border-gray-200 rounded-lg text-xs font-mono text-slate-500" value={formData.longitude || 'Not set'} />
+                      </div>
                     </div>
                   </div>
                 </div>
