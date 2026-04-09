@@ -382,7 +382,12 @@ export default function CustomersPage() {
                        <MapPicker 
                         lat={formData.latitude} 
                         lng={formData.longitude} 
-                        onChange={(lat, lng) => setFormData(prev => ({ ...prev, latitude: lat, longitude: lng }))} 
+                        onChange={(lat, lng, address) => setFormData(prev => ({ 
+                          ...prev, 
+                          latitude: lat, 
+                          longitude: lng,
+                          address: address || prev.address
+                        }))} 
                        />
                        <p className="text-[9px] text-slate-400 mt-2 italic font-medium uppercase tracking-widest">Click on map to pin precise delivery coordinates.</p>
                     </div>
