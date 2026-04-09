@@ -17,5 +17,10 @@ jobs:
             cd /home/ubuntu/frontend
             git pull origin main
             npm install
+            # Build with memory optimization and environment variables
+            export NODE_OPTIONS="--max-old-space-size=2048"
+            export NEXT_PUBLIC_API_URL="${{ secrets.NEXT_PUBLIC_API_URL }}"
+            export NEXT_PUBLIC_API_BASE_URL="${{ secrets.NEXT_PUBLIC_API_BASE_URL }}"
+            export NEXT_PUBLIC_GOOGLE_MAPS_API_KEY="${{ secrets.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY }}"
             npm run build
-            pm2 restart frontend-app
+            pm2 restart frontend-app || pm2 start npm --name "frontend-app" -- start
