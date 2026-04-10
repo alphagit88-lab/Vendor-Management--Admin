@@ -59,7 +59,7 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onUpdate }: 
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter leading-none">Order Lifecycle Details</h2>
+                <h2 className="text-2xl font-black text-slate-900 uppercase tracking-tighter leading-none">Order Details</h2>
                 <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${
                   order.status === 'completed' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 
                   order.status === 'pending' ? 'bg-amber-50 text-amber-700 border-amber-100' : 'bg-slate-50 text-slate-700 border-slate-100'
@@ -195,7 +195,7 @@ export default function OrderDetailsModal({ isOpen, onClose, order, onUpdate }: 
                     {isUpdating ? 'Executing Trace...' : (
                       <>
                         <CheckCircle2 className="w-4 h-4" />
-                        Finalize & Confirm
+                        Confirm
                       </>
                     )}
                   </button>

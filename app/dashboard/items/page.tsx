@@ -329,7 +329,7 @@ export default function ItemsPage() {
                   <Package className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-black tracking-tight text-slate-900 uppercase">
-                  {isEdit ? 'Update Item Matrix' : 'Manage Product Node'}
+                  {isEdit ? 'Update Item Matrix' : 'Manage Product'}
                 </h2>
               </div>
               <button className="p-2 bg-gray-50 hover:bg-gray-100 rounded-full transition" onClick={() => setShowModal(false)}>
@@ -413,7 +413,7 @@ export default function ItemsPage() {
               <div className="pt-8 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
                 <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-bold text-slate-500 rounded-lg hover:bg-gray-50 transition uppercase text-[10px] tracking-widest">Cancel</button>
                 <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-orange-600 text-white font-black rounded-lg hover:bg-orange-700 shadow-lg shadow-orange-100 transition disabled:opacity-50 uppercase text-[10px] tracking-widest">
-                  {submitting ? (isEdit ? 'Updating...' : 'Committing...') : (isEdit ? 'Update Record' : 'Commit Record')}
+                  {submitting ? (isEdit ? 'Updating...' : 'Submitting...') : (isEdit ? 'Update Record' : 'Submit')}
                 </button>
               </div>
             </form>
