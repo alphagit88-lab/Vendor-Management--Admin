@@ -197,7 +197,7 @@ export default function UsersPage() {
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Staff Name</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Phone Number</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Email Address</th>
-                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Sub-inventory (Location)</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Location</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Date Joined</th>
                 <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right font-sans">Actions</th>
               </tr>
@@ -290,7 +290,7 @@ export default function UsersPage() {
                     <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Email Address <span className="text-rose-500">*</span></label>
                     <input type="email" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600/10 rounded-lg transition text-sm outline-none font-medium" placeholder="jane@company.com" required
                       value={formData.email} onChange={e => setFormData({ ...formData, email: e.target.value })} />
-                    <p className="text-[10px] text-slate-400 mt-1 uppercase font-bold tracking-wider">Used for staff login</p>
+
                   </div>
                   <div>
                     <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Phone</label>
@@ -300,7 +300,7 @@ export default function UsersPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Mapped Sub-inventory (Location)</label>
+                  <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Location</label>
                   <input 
                     type="text" 
                     className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600/10 rounded-lg transition text-sm outline-none font-medium" 
@@ -311,7 +311,7 @@ export default function UsersPage() {
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">{isEdit ? 'Update Security Password (Optional)' : 'Secure Temporary Password'}</label>
+                  <label className="block text-[11px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">{isEdit ? 'Update Password' : 'Secure Temporary Password'}</label>
                   <div className="relative">
                     <input 
                       type={showPassword ? 'text' : 'password'} 

@@ -271,7 +271,7 @@ export default function CustomersPage() {
                   <Building2 className="w-4 h-4" />
                 </div>
                 <h2 className="text-xl font-black tracking-tight text-slate-900 uppercase">
-                  {isEdit ? 'Update Customer Node' : 'Register Retailer'}
+                  {isEdit ? 'Update Customer' : 'Register Retailer'}
                 </h2>
               </div>
               <button className="p-2 bg-gray-50 hover:bg-gray-100 rounded-full transition" onClick={() => setShowModal(false)}>

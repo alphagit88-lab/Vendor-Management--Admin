@@ -152,23 +152,7 @@ export default function InventoryPage() {
             </button>
           </div>
 
-          <div className="flex items-center gap-3 bg-white p-1 rounded-lg border border-gray-200 shadow-sm h-fit relative">
-              <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none px-2 pr-0">Sub-Inventory</span>
-              <div className="relative flex items-center">
-                <select 
-                  value={selectedSubInventory}
-                  onChange={(e) => setSelectedSubInventory(e.target.value)}
-                  className="bg-transparent text-slate-800 font-bold text-xs py-1.5 pl-2 pr-8 outline-none cursor-pointer appearance-none"
-                >
-                  <option value="ALL_STOCK">🌍 Global Total</option>
-                  <option value="WAREHOUSE">🏢 Main Warehouse</option>
-                  {users.filter(u => u.role === 'staff').map(u => (
-                    <option key={u.id} value={`SP_${u.id}`}>📍 {u.name}</option>
-                  ))}
-                </select>
-                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2 pointer-events-none" />
-              </div>
-          </div>
+
         </div>
       </div>
 
@@ -190,6 +174,24 @@ export default function InventoryPage() {
                     <h2 className="text-3xl font-black text-slate-900 tracking-tighter">
                         {inventory.reduce((acc, i) => Number(acc) + Number(i.total_quantity || 0), 0).toLocaleString()}
                     </h2>
+                </div>
+            </div>
+
+            <div className="flex items-center gap-3 bg-white p-1 rounded-lg border border-gray-200 shadow-sm h-fit relative w-fit mb-4">
+                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest leading-none px-2 pr-0">Sub-Inventory</span>
+                <div className="relative flex items-center">
+                  <select 
+                    value={selectedSubInventory}
+                    onChange={(e) => setSelectedSubInventory(e.target.value)}
+                    className="bg-transparent text-slate-800 font-bold text-xs py-1.5 pl-2 pr-10 outline-none cursor-pointer appearance-none"
+                  >
+                    <option value="ALL_STOCK">🌍 Global Total</option>
+                    <option value="WAREHOUSE">🏢 Main Warehouse</option>
+                    {users.filter(u => u.role === 'staff').map(u => (
+                      <option key={u.id} value={`SP_${u.id}`}>📍 {u.name}</option>
+                    ))}
+                  </select>
+                  <ChevronDown className="w-4 h-4 text-slate-400 absolute right-2 pointer-events-none" />
                 </div>
             </div>
 

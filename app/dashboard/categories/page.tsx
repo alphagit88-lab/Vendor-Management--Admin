@@ -131,7 +131,7 @@ export default function CategoriesPage() {
                   System ID: <span className="font-mono text-slate-900 bg-slate-50 px-2 py-0.5 rounded">#{cat.id}</span>
                </span>
                <button onClick={() => handleEdit(cat)} className="text-xs font-black text-indigo-600 group-hover:translate-x-1 transition-transform flex items-center gap-1">
-                  Manage Node <ChevronRight className="w-3 h-3" />
+                   Edit Category <ChevronRight className="w-3 h-3" />
                </button>
             </div>
           </div>
@@ -155,7 +155,7 @@ export default function CategoriesPage() {
             <div className="px-10 py-8 flex justify-between items-center border-b border-gray-50">
               <div>
                 <h2 className="text-2xl font-black tracking-tight text-slate-900">
-                  {isEdit ? 'Refine Hierarchy' : 'Create Category'}
+                  {isEdit ? 'Edit Category' : 'Create Category'}
                 </h2>
                 <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Classification Management</p>
               </div>
@@ -191,7 +191,7 @@ export default function CategoriesPage() {
               <div className="flex gap-4">
                 <button type="button" onClick={() => setShowModal(false)} className="flex-1 py-4 font-bold text-slate-500 bg-slate-50 rounded-2xl hover:bg-slate-100 transition-colors">Abort</button>
                 <button type="submit" disabled={loading} className="flex-2 py-4 bg-indigo-600 text-white font-black rounded-2xl hover:bg-indigo-700 shadow-xl shadow-indigo-100 transition-all hover:-translate-y-0.5 disabled:opacity-50">
-                  {loading ? 'Committing...' : (isEdit ? 'Update Node' : 'Commit Node')}
+                  {loading ? 'Committing...' : (isEdit ? 'Update' : 'Create')}
                 </button>
               </div>
             </form>
