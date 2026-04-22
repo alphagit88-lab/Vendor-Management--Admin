@@ -48,8 +48,8 @@ const themeVars: CSSProperties = {
 const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'Overview', href: '#overview' },
-  { label: 'Workflow', href: '#workflow' },
-  { label: 'Services', href: '#services' },
+  { label: 'Why SuperVendor?', href: '#workflow' },
+  { label: 'Steps', href: '#services' },
 ];
 
 const heroSlides: Array<{
@@ -61,44 +61,43 @@ const heroSlides: Array<{
   spotlight: string;
 }> = [
   {
-    eyebrow: 'Mobile Delivery Workflow',
+    eyebrow: 'Smart Delivery System',
     title: 'Faster Deliveries. Zero Errors.',
     description:
       'Scan, sync, and print invoices in seconds. Keep your drivers moving and your customers happy.',
     image: image1,
-    alt: 'Delivery driver beside a stocked van holding a portable invoice printer.',
+    alt: 'Delivery driver beside a stocked vehicle holding a portable invoice printer.',
     spotlight: 'Portable printing at the curb',
   },
   {
     eyebrow: 'Smart Invoice Control',
     title: 'Invoicing Just Got Smarter.',
-    description:
-      'Streamline your deliveries with real-time data entry and instant on-site printing.',
+    description: 'Create invoices instantly with live delivery updates.',
     image: image6,
     alt: 'Portable invoice printer producing printed receipts beside a stack of invoices.',
-    spotlight: 'Clear invoices the moment the stop is complete',
+    spotlight: 'Print at the stop',
   },
   {
     eyebrow: 'Live Route Sync',
     title: 'Deliver. Sync. Print. Done.',
-    description: 'Managing your supply chain has never been this simple.',
+    description: 'One simple flow for drivers, stores, and invoices.',
     image: image5,
-    alt: 'Delivery team unloading a van while another worker updates stock from a handheld device.',
-    spotlight: 'One flow for the van, the store, and the back office',
+    alt: 'Delivery team unloading a vehicle while another worker updates stock from a handheld device.',
+    spotlight: 'One system for every stop',
   },
 ];
 
 const proofTags = [
-  'Handheld scan capture',
-  'Real-time delivery sync',
-  'Portable invoice printing',
+  'Scan fast',
+  'Sync live',
+  'Print instantly',
 ];
 
 const overviewChecks = [
-  'Capture stock movement as soon as cartons leave the van.',
-  'Keep delivery data synced between drivers, stores, and admin instantly.',
-  'Print clean invoices on-site without slowing the route down.',
-  'Replace manual follow-up with one connected field workflow.',
+  'Scan products as soon as they leave the vehicle.',
+  'Keep store and delivery data updated live.',
+  'Print invoices on-site in seconds.',
+  'Reduce mistakes and save time.',
 ];
 
 const statCards = [
@@ -111,13 +110,13 @@ const statCards = [
   {
     value: '06',
     label: 'Field touchpoints',
-    description: 'From loading the van to shelf refill, every stop stays visible and connected.',
+    description: 'From loading the vehicle to shelf refill, every stop stays visible and connected.',
     icon: Waypoints,
   },
   {
     value: '01',
-    label: 'Unified workflow',
-    description: 'Drivers and admin work from the same delivery story instead of separate updates.',
+    label: 'One simple system',
+    description: 'Drivers and stores stay on the same page.',
     icon: Printer,
   },
 ];
@@ -125,18 +124,15 @@ const statCards = [
 const reasons = [
   {
     title: 'Scan once at the stop',
-    description:
-      'Drivers capture cartons, quantities, and changes on the spot so the paperwork starts accurate.',
+    description: 'Capture items and quantities right away.',
   },
   {
-    title: 'Sync without retyping',
-    description:
-      'Updates move straight into the workflow, which keeps operations aligned while the route is still active.',
+    title: 'Sync in real time',
+    description: 'Updates appear instantly without extra typing.',
   },
   {
     title: 'Print before pulling away',
-    description:
-      'Customers get a clear invoice immediately, which shortens handoff time and reduces follow-up friction.',
+    description: 'Give the customer an invoice before the driver leaves.',
   },
 ];
 
@@ -144,17 +140,15 @@ const serviceCards = [
   {
     eyebrow: 'Step 01',
     title: 'Arrival Scanning',
-    description:
-      'Start each stop with clean quantity capture so the delivery record is right from the first tap.',
+    description: 'Scan items at the start of the stop.',
     image: image5,
-    alt: 'Delivery team unloading a van and using handheld devices.',
+    alt: 'Delivery team unloading a vehicle and using handheld devices.',
     featured: false,
   },
   {
     eyebrow: 'Step 02',
     title: 'Shelf Refill Sync',
-    description:
-      'Move from delivery boxes to storefront shelves while the system keeps quantities and notes in sync.',
+    description: 'Update stock while items go to the shelf.',
     image: image3,
     alt: 'Driver organizing snacks and supplies inside a convenience store aisle.',
     featured: false,
@@ -162,8 +156,7 @@ const serviceCards = [
   {
     eyebrow: 'Step 03',
     title: 'Invoice Review',
-    description:
-      'Confirm item details at the counter with a workflow that feels quicker and more reliable for both sides.',
+    description: 'Check the order with the customer.',
     image: image2,
     alt: 'Two team members reviewing boxes and invoice paperwork inside a convenience store.',
     featured: false,
@@ -171,8 +164,7 @@ const serviceCards = [
   {
     eyebrow: 'Step 04',
     title: 'Instant Printout',
-    description:
-      'Finish every stop with a portable invoice printer that turns synced data into a clean customer copy.',
+    description: 'Print the invoice right there on the spot.',
     image: image6,
     alt: 'Portable printer creating a printed invoice.',
     featured: true,
@@ -351,10 +343,10 @@ export default function Home() {
               </div>
               <div className="min-w-0">
                 <p className="truncate font-[family:var(--font-space-grotesk)] text-xl font-bold tracking-[-0.05em] text-[var(--landing-brand-strong)]">
-                  VendorFlow
+                  SuperVendor
                 </p>
                 <p className="truncate text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[var(--landing-muted)]">
-                  Delivery Invoice Admin
+                  Scan. Sync. Print.
                 </p>
               </div>
             </Link>
@@ -483,14 +475,14 @@ export default function Home() {
                         href="/login"
                         className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--landing-accent)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_18px_48px_rgba(200,108,73,0.30)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_56px_rgba(200,108,73,0.36)]"
                       >
-                        Open Admin Login
+                        Login
                         <ArrowRight className="h-4 w-4" />
                       </Link>
                       <Link
                         href="#overview"
                         className="inline-flex items-center justify-center rounded-full border border-white/14 bg-white/8 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/14"
                       >
-                        Explore Workflow
+                        Learn More
                       </Link>
                     </div>
 
@@ -510,7 +502,7 @@ export default function Home() {
                 <div className="hidden lg:block">
                   <div className="ml-auto max-w-md rounded-[2rem] border border-white/12 bg-white/10 p-6 text-white shadow-[0_28px_70px_rgba(0,0,0,0.25)] backdrop-blur-xl">
                     <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/58">
-                      Field-ready promise
+                      Why it helps
                     </p>
                     <p className="mt-3 font-[family:var(--font-space-grotesk)] text-3xl font-semibold leading-tight tracking-[-0.05em] text-white">
                       {currentSlide.spotlight}
@@ -518,11 +510,11 @@ export default function Home() {
                     <div className="mt-5 space-y-3 text-sm leading-7 text-white/76">
                       <div className="flex items-start gap-3">
                         <Check className="mt-1 h-4 w-4 shrink-0 text-[var(--landing-highlight)]" />
-                        <span>Drivers move faster because paperwork happens at the stop, not after the route.</span>
+                        <span>Less waiting at each stop.</span>
                       </div>
                       <div className="flex items-start gap-3">
                         <Check className="mt-1 h-4 w-4 shrink-0 text-[var(--landing-highlight)]" />
-                        <span>Shared data reduces missed updates between delivery teams and the office.</span>
+                        <span>Fewer invoice mistakes.</span>
                       </div>
                     </div>
                   </div>
@@ -567,7 +559,7 @@ export default function Home() {
                   <div className="relative aspect-[4/5]">
                     <Image
                       src={image4}
-                      alt="Delivery worker standing beside a van with portable printer and stacked supplies."
+                      alt="Delivery worker standing beside a vehicle with portable printer and stacked supplies."
                       fill
                       placeholder="blur"
                       sizes="(min-width: 1024px) 25vw, 56vw"
@@ -594,12 +586,10 @@ export default function Home() {
                   Overview
                 </p>
                 <h2 className="mt-4 max-w-[13ch] font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-[var(--landing-brand-strong)] sm:text-5xl">
-                  Built for speed in the van and clarity at the counter.
+                  Simple tools for faster stops.
                 </h2>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--landing-muted)]">
-                  This redesign keeps the sample's bold section rhythm, but the story now centers on delivery teams,
-                  handheld scanning, synced route data, and portable invoice printing instead of the original site's
-                  industry visuals and color treatment.
+                  SuperVendor helps drivers scan items, sync updates, and print invoices without slowing down.
                 </p>
 
                 <div className="mt-8 grid gap-4">
@@ -625,8 +615,8 @@ export default function Home() {
                         <Truck className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-[var(--landing-brand-strong)]">Driver-ready flow</p>
-                        <p className="text-sm text-[var(--landing-muted)]">Unload, update, confirm.</p>
+                        <p className="text-sm font-semibold text-[var(--landing-brand-strong)]">Easy for drivers</p>
+                        <p className="text-sm text-[var(--landing-muted)]">Scan, update, confirm.</p>
                       </div>
                     </div>
                   </div>
@@ -636,8 +626,8 @@ export default function Home() {
                         <Printer className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-[var(--landing-brand-strong)]">Customer-ready finish</p>
-                        <p className="text-sm text-[var(--landing-muted)]">Printed proof before departure.</p>
+                        <p className="text-sm font-semibold text-[var(--landing-brand-strong)]">Easy for stores</p>
+                        <p className="text-sm text-[var(--landing-muted)]">Get the invoice instantly.</p>
                       </div>
                     </div>
                   </div>
@@ -688,14 +678,13 @@ export default function Home() {
 
               <div data-reveal="right">
                 <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[var(--landing-accent)]">
-                  Why Choose This Flow
+                  Why SuperVendor?
                 </p>
                 <h2 className="mt-4 max-w-[12ch] font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-[var(--landing-brand-strong)] sm:text-5xl">
-                  A lighter field process with fewer slow handoffs.
+                  Faster stops. Clearer invoices.
                 </h2>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--landing-muted)]">
-                  The page now tells a cleaner product story: drivers scan quickly, updates stay synced, and every stop
-                  can end with a customer-ready invoice.
+                  It keeps delivery simple from the vehicle to the counter.
                 </p>
 
                 <div className="mt-8 space-y-5">
@@ -718,15 +707,14 @@ export default function Home() {
                 </div>
 
                 <div className="mt-8 rounded-[1.9rem] border border-[var(--landing-accent-soft)] bg-[var(--landing-surface)] p-6 shadow-[0_18px_42px_rgba(17,32,51,0.05)]">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--landing-brand-strong)] text-white">
-                      <ShieldCheck className="h-5 w-5" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-[var(--landing-brand-strong)]">Built to feel reliable on the route</p>
+                    <div className="flex items-start gap-4">
+                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--landing-brand-strong)] text-white">
+                        <ShieldCheck className="h-5 w-5" />
+                      </div>
+                      <div>
+                      <p className="font-semibold text-[var(--landing-brand-strong)]">Built to stay simple</p>
                       <p className="mt-2 text-sm leading-7 text-[var(--landing-muted)]">
-                        Every section supports the same promise: quicker stops, clearer records, and smoother delivery
-                        proof at the point of service.
+                        Drivers, stores, and invoices stay connected in one simple flow.
                       </p>
                     </div>
                   </div>
@@ -743,11 +731,10 @@ export default function Home() {
                 Delivery Steps
               </p>
               <h2 className="mt-4 font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-[var(--landing-brand-strong)] sm:text-5xl">
-                The page walks visitors through the flow in the same strong rhythm as the sample.
+                Four simple steps at every stop.
               </h2>
               <p className="mt-6 text-lg leading-8 text-[var(--landing-muted)]">
-                Floating image cards, crisp spacing, and reveal animations keep the structure familiar while the content
-                stays fully yours.
+                Scan, update, check, and print.
               </p>
             </div>
 
@@ -782,13 +769,6 @@ export default function Home() {
                     <p className="mt-4 text-sm leading-7 text-[var(--landing-muted)] transition-colors duration-300 group-hover:text-white/78">
                       {card.description}
                     </p>
-
-                    <Link
-                      href="/login"
-                      className="mt-8 inline-flex items-center justify-center rounded-full bg-[var(--landing-surface)] px-5 py-3 text-sm font-semibold text-[var(--landing-brand-strong)] transition duration-300 hover:bg-[var(--landing-surface-strong)] group-hover:bg-white group-hover:text-[var(--landing-brand-strong)]"
-                    >
-                      Open workflow
-                    </Link>
                   </article>
                 </div>
               ))}
@@ -802,20 +782,19 @@ export default function Home() {
           <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-4">
             <div>
               <p className="font-[family:var(--font-space-grotesk)] text-2xl font-semibold tracking-[-0.05em]">
-                VendorFlow
+                SuperVendor
               </p>
               <p className="mt-4 max-w-xs text-sm leading-7 text-white/74">
-                A landing page shaped around mobile delivery invoicing, cleaner route updates, and fast customer-ready
-                printouts.
+                Fast delivery tools with live sync and instant printing.
               </p>
             </div>
 
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/52">Workflow</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/52">Why SuperVendor?</p>
               <div className="mt-4 space-y-3 text-sm text-white/76">
-                <p>Scan stock at arrival.</p>
-                <p>Sync quantities and notes.</p>
-                <p>Print invoices before departure.</p>
+                <p>Faster delivery stops.</p>
+                <p>Fewer mistakes.</p>
+                <p>Instant invoices.</p>
               </div>
             </div>
 
@@ -833,20 +812,20 @@ export default function Home() {
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/52">Access</p>
               <p className="mt-4 max-w-xs text-sm leading-7 text-white/76">
-                Ready to continue into the admin area? Jump straight into the current workspace.
+                Ready to get started?
               </p>
               <Link
                 href="/login"
                 className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--landing-accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(0,0,0,0.18)] transition hover:-translate-y-0.5"
               >
-                Go to Login
+                Login
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
 
           <div className="mt-12 border-t border-white/10 pt-6 text-sm text-white/52">
-            Copyright {currentYear} VendorFlow. Redesigned with your provided delivery and invoice visuals.
+            Copyright {currentYear} SuperVendor.
           </div>
         </div>
       </footer>
