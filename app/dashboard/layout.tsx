@@ -48,7 +48,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div className="relative w-full h-16 bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden p-1">
                 <div className="relative w-full h-full">
                   <Image
-                    src="/logo.jpeg"
+                    src="/logon.jpeg"
                     alt="VendorOS Logo"
                     fill
                     sizes="240px"

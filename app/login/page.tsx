@@ -48,7 +48,7 @@ export default function Login() {
           <div className="w-32 h-32 relative p-2 bg-white rounded-3xl shadow-lg border border-gray-100">
             <div className="relative w-full h-full">
               <Image
-                src="/logo.jpeg"
+                src="/logon.jpeg"
                 alt="VendorOS"
                 fill
                 sizes="128px"
@@ -74,7 +74,7 @@ export default function Login() {
             <div className="lg:hidden flex justify-center mb-8">
               <div className="w-32 h-32 relative overflow-hidden p-2 bg-white rounded-2xl shadow-md border border-gray-100">
                 <div className="relative w-full h-full">
-                  <Image src="/logo.jpeg" alt="VendorOS" fill sizes="128px" className="object-contain" />
+                  <Image src="/logon.jpeg" alt="VendorOS" fill sizes="128px" className="object-contain" />
                 </div>
               </div>
             </div>

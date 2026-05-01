@@ -60,32 +60,32 @@ const heroSlides: Array<{
   alt: string;
   spotlight: string;
 }> = [
-  {
-    eyebrow: 'Smart Delivery System',
-    title: 'Faster Deliveries. Zero Errors.',
-    description:
-      'Scan, sync, and print invoices in seconds. Keep your drivers moving and your customers happy.',
-    image: image1,
-    alt: 'Delivery driver beside a stocked vehicle holding a portable invoice printer.',
-    spotlight: 'Portable printing at the curb',
-  },
-  {
-    eyebrow: 'Smart Invoice Control',
-    title: 'Invoicing Just Got Smarter.',
-    description: 'Create invoices instantly with live delivery updates.',
-    image: image6,
-    alt: 'Portable invoice printer producing printed receipts beside a stack of invoices.',
-    spotlight: 'Print at the stop',
-  },
-  {
-    eyebrow: 'Live Route Sync',
-    title: 'Deliver. Sync. Print. Done.',
-    description: 'One simple flow for drivers, stores, and invoices.',
-    image: image5,
-    alt: 'Delivery team unloading a vehicle while another worker updates stock from a handheld device.',
-    spotlight: 'One system for every stop',
-  },
-];
+    {
+      eyebrow: 'Smart Delivery System',
+      title: 'Faster Deliveries. Zero Errors.',
+      description:
+        'Scan, sync, and print invoices in seconds. Keep your drivers moving and your customers happy.',
+      image: image1,
+      alt: 'Delivery driver beside a stocked vehicle holding a portable invoice printer.',
+      spotlight: 'Portable printing at the curb',
+    },
+    {
+      eyebrow: 'Smart Invoice Control',
+      title: 'Invoicing Just Got Smarter.',
+      description: 'Create invoices instantly with live delivery updates.',
+      image: image6,
+      alt: 'Portable invoice printer producing printed receipts beside a stack of invoices.',
+      spotlight: 'Print at the stop',
+    },
+    {
+      eyebrow: 'Live Route Sync',
+      title: 'Deliver. Sync. Print. Done.',
+      description: 'One simple flow for drivers, stores, and invoices.',
+      image: image5,
+      alt: 'Delivery team unloading a vehicle while another worker updates stock from a handheld device.',
+      spotlight: 'One system for every stop',
+    },
+  ];
 
 const proofTags = [
   'Scan fast',
@@ -333,7 +333,7 @@ export default function Home() {
             <Link href="#home" className="flex min-w-0 items-center gap-3" onClick={() => setMenuOpen(false)}>
               <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm">
                 <Image
-                  src="/logo.jpeg"
+                  src="/logon.jpeg"
                   alt="Vendor Management logo"
                   fill
                   sizes="48px"
@@ -415,9 +415,8 @@ export default function Home() {
               {heroSlides.map((slide, index) => (
                 <div
                   key={slide.title}
-                  className={`absolute inset-0 transition-opacity duration-[1400ms] ${
-                    index === activeSlide ? 'opacity-100' : 'opacity-0'
-                  }`}
+                  className={`absolute inset-0 transition-opacity duration-[1400ms] ${index === activeSlide ? 'opacity-100' : 'opacity-0'
+                    }`}
                 >
                   <Image
                     src={slide.image}
@@ -426,9 +425,8 @@ export default function Home() {
                     placeholder="blur"
                     priority={index === 0}
                     sizes="100vw"
-                    className={`object-cover object-center transition-transform duration-[7000ms] ease-out ${
-                      index === activeSlide ? 'scale-100' : 'scale-[1.08]'
-                    }`}
+                    className={`object-cover object-center transition-transform duration-[7000ms] ease-out ${index === activeSlide ? 'scale-100' : 'scale-[1.08]'
+                      }`}
                   />
                 </div>
               ))}
@@ -528,9 +526,8 @@ export default function Home() {
                   key={slide.title}
                   type="button"
                   aria-label={`Show slide ${index + 1}`}
-                  className={`h-3 rounded-full transition-all duration-300 ${
-                    index === activeSlide ? 'w-12 bg-white' : 'w-3 bg-white/35 hover:bg-white/55'
-                  }`}
+                  className={`h-3 rounded-full transition-all duration-300 ${index === activeSlide ? 'w-12 bg-white' : 'w-3 bg-white/35 hover:bg-white/55'
+                    }`}
                   onClick={() => setActiveSlide(index)}
                 />
               ))}
@@ -707,11 +704,11 @@ export default function Home() {
                 </div>
 
                 <div className="mt-8 rounded-[1.9rem] border border-[var(--landing-accent-soft)] bg-[var(--landing-surface)] p-6 shadow-[0_18px_42px_rgba(17,32,51,0.05)]">
-                    <div className="flex items-start gap-4">
-                      <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--landing-brand-strong)] text-white">
-                        <ShieldCheck className="h-5 w-5" />
-                      </div>
-                      <div>
+                  <div className="flex items-start gap-4">
+                    <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--landing-brand-strong)] text-white">
+                      <ShieldCheck className="h-5 w-5" />
+                    </div>
+                    <div>
                       <p className="font-semibold text-[var(--landing-brand-strong)]">Built to stay simple</p>
                       <p className="mt-2 text-sm leading-7 text-[var(--landing-muted)]">
                         Drivers, stores, and invoices stay connected in one simple flow.
