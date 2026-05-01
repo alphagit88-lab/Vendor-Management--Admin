@@ -14,7 +14,7 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
   useEffect(() => {
     setMounted(true);
     const token = localStorage.getItem('token');
-    
+
     // Allow access to login page without a token
     if (pathname === '/staff/login') return;
 
@@ -24,9 +24,9 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
       try {
         const payload = JSON.parse(atob(token.split('.')[1]));
         if (payload.role !== 'staff' && payload.role !== 'admin') {
-            localStorage.removeItem('token');
-            router.push('/staff/login');
-            return;
+          localStorage.removeItem('token');
+          router.push('/staff/login');
+          return;
         }
         setUser({ name: payload.name || 'Staff', role: payload.role || 'staff' });
       } catch (e) {
@@ -56,15 +56,17 @@ export default function StaffLayout({ children }: { children: React.ReactNode })
         <div>
           <div className="h-24 flex items-center justify-center px-4 border-b border-gray-200">
             <Link href="/staff/dashboard" className="w-full">
-              <div className="relative w-full h-16">
-                <Image 
-                  src="/logo.jpeg" 
-                  alt="VendorOS Logo" 
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  className="object-contain"
-                  priority
-                />
+              <div className="relative w-full h-16 bg-white rounded-md shadow-sm border border-gray-100 overflow-hidden p-1">
+                <div className="relative w-full h-full">
+                  <Image
+                    src="/logo.jpeg"
+                    alt="VendorOS Logo"
+                    fill
+                    sizes="240px"
+                    className="object-contain"
+                    priority
+                  />
+                </div>
               </div>
             </Link>
           </div>

@@ -18,7 +18,7 @@ export default function StaffLogin() {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
@@ -29,9 +29,9 @@ export default function StaffLogin() {
       if (data.success) {
         localStorage.setItem('token', data.token);
         if (data.user.role === 'staff' || data.user.role === 'admin') {
-            router.push('/staff/dashboard');
+          router.push('/staff/dashboard');
         } else {
-            setError('Access denied: Staff account required.');
+          setError('Access denied: Staff account required.');
         }
       } else {
         setError(data.message || 'Login failed');
@@ -48,14 +48,17 @@ export default function StaffLogin() {
       <div className="hidden lg:flex flex-col justify-center items-center bg-[#0f172a] text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-br from-indigo-900/50 to-slate-900 pointer-events-none" />
         <div className="z-10 max-w-lg px-8 flex flex-col items-center justify-center">
-          <div className="w-full h-40 relative px-4">
-            <Image 
-              src="/logo.jpeg" 
-              alt="VendorOS" 
-              fill
-              className="object-contain"
-              priority
-            />
+          <div className="w-32 h-32 relative p-2 bg-white rounded-3xl shadow-lg border border-slate-700/50">
+            <div className="relative w-full h-full">
+              <Image
+                src="/logo.jpeg"
+                alt="VendorOS"
+                fill
+                sizes="128px"
+                className="object-contain"
+                priority
+              />
+            </div>
           </div>
           <h1 className="text-3xl font-black mt-8 text-white uppercase tracking-tighter">Staff Portal</h1>
           <p className="text-lg text-slate-300 mt-4 mb-8 leading-relaxed text-center font-medium">
@@ -73,8 +76,10 @@ export default function StaffLogin() {
         <div className="w-full max-w-md mx-auto space-y-10">
           <div className="text-center lg:text-left">
             <div className="lg:hidden flex justify-center mb-8">
-              <div className="w-full h-24 relative overflow-hidden px-4">
-                <Image src="/logo.jpeg" alt="VendorOS" fill className="object-contain" />
+              <div className="w-20 h-20 relative overflow-hidden p-2 bg-white rounded-2xl shadow-md border border-gray-100">
+                <div className="relative w-full h-full">
+                  <Image src="/logo.jpeg" alt="VendorOS" fill sizes="80px" className="object-contain" />
+                </div>
               </div>
             </div>
             <h2 className="text-4xl font-black text-slate-900 tracking-tight uppercase">Staff Sign-In</h2>
@@ -87,7 +92,7 @@ export default function StaffLogin() {
                 <span className="shrink-0 animate-pulse text-rose-400">●</span> {error}
               </div>
             )}
-            
+
             <div className="space-y-5">
               <div>
                 <label className="block text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest">Email Address</label>

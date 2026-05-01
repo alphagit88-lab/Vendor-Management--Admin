@@ -18,7 +18,7 @@ export default function Login() {
     e.preventDefault();
     setLoading(true);
     setError('');
-    
+
     try {
       const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
@@ -45,14 +45,17 @@ export default function Login() {
       <div className="hidden lg:flex flex-col justify-center items-center bg-slate-900 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-linear-to-br from-indigo-900/50 to-slate-900 pointer-events-none" />
         <div className="z-10 max-w-lg px-8 flex flex-col items-center justify-center">
-          <div className="w-full h-40 relative px-4">
-            <Image 
-              src="/logo.jpeg" 
-              alt="VendorOS" 
-              fill
-              className="object-contain"
-              priority
-            />
+          <div className="w-32 h-32 relative p-2 bg-white rounded-3xl shadow-lg border border-gray-100">
+            <div className="relative w-full h-full">
+              <Image
+                src="/logo.jpeg"
+                alt="VendorOS"
+                fill
+                sizes="128px"
+                className="object-contain"
+                priority
+              />
+            </div>
           </div>
           <p className="text-lg text-slate-300 mt-8 mb-8 leading-relaxed text-center">
             The next-generation operations platform built for precision, speed, and absolute control.
@@ -69,8 +72,10 @@ export default function Login() {
         <div className="w-full max-w-md mx-auto space-y-8">
           <div className="text-center lg:text-left">
             <div className="lg:hidden flex justify-center mb-8">
-              <div className="w-full h-24 relative overflow-hidden px-4">
-                <Image src="/logo.jpeg" alt="VendorOS" fill className="object-contain" />
+              <div className="w-32 h-32 relative overflow-hidden p-2 bg-white rounded-2xl shadow-md border border-gray-100">
+                <div className="relative w-full h-full">
+                  <Image src="/logo.jpeg" alt="VendorOS" fill sizes="128px" className="object-contain" />
+                </div>
               </div>
             </div>
             <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Sign in</h2>
@@ -83,7 +88,7 @@ export default function Login() {
                 <span className="shrink-0 animate-pulse">●</span> {error}
               </div>
             )}
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Phone Number</label>
