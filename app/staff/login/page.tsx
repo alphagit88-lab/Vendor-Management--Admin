@@ -51,8 +51,8 @@ export default function StaffLogin() {
           <div className="w-32 h-32 relative p-2 bg-white rounded-3xl shadow-lg border border-slate-700/50">
             <div className="relative w-full h-full">
               <Image
-                src="/logon.jpeg"
-                alt="VendorOS"
+                src="/lgoNewWeb.jpeg"
+                alt="Jenko Coffee Vendor"
                 fill
                 sizes="128px"
                 className="object-contain"
@@ -78,7 +78,7 @@ export default function StaffLogin() {
             <div className="lg:hidden flex justify-center mb-8">
               <div className="w-20 h-20 relative overflow-hidden p-2 bg-white rounded-2xl shadow-md border border-gray-100">
                 <div className="relative w-full h-full">
-                  <Image src="/logon.jpeg" alt="VendorOS" fill sizes="80px" className="object-contain" />
+                  <Image src="/lgoNewWeb.jpeg" alt="Jenko Coffee Vendor" fill sizes="80px" className="object-contain" />
                 </div>
               </div>
             </div>
@@ -147,7 +147,7 @@ export default function StaffLogin() {
           </form>
 
           <p className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            © 2026 VendorOS Management System
+            © 2026 Jenko Coffee Vendor Management System
           </p>
         </div>
       </div>

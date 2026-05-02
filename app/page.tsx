@@ -48,7 +48,7 @@ const themeVars: CSSProperties = {
 const navLinks = [
   { label: 'Home', href: '#home' },
   { label: 'Overview', href: '#overview' },
-  { label: 'Why SuperVendor?', href: '#workflow' },
+  { label: 'Why Jenko Coffee Vendor?', href: '#workflow' },
   { label: 'Steps', href: '#services' },
 ];
 
@@ -333,8 +333,8 @@ export default function Home() {
             <Link href="#home" className="flex min-w-0 items-center gap-3" onClick={() => setMenuOpen(false)}>
               <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm">
                 <Image
-                  src="/logon.jpeg"
-                  alt="Vendor Management logo"
+                  src="/lgoNewWeb.jpeg"
+                  alt="Jenko Coffee Vendor logo"
                   fill
                   sizes="48px"
                   priority
@@ -343,7 +343,7 @@ export default function Home() {
               </div>
               <div className="min-w-0">
                 <p className="truncate font-[family:var(--font-space-grotesk)] text-xl font-bold tracking-[-0.05em] text-[var(--landing-brand-strong)]">
-                  SuperVendor
+                  Jenko Coffee Vendor
                 </p>
                 <p className="truncate text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[var(--landing-muted)]">
                   Scan. Sync. Print.
@@ -586,7 +586,7 @@ export default function Home() {
                   Simple tools for faster stops.
                 </h2>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--landing-muted)]">
-                  SuperVendor helps drivers scan items, sync updates, and print invoices without slowing down.
+                  Jenko Coffee Vendor helps drivers scan items, sync updates, and print invoices without slowing down.
                 </p>
 
                 <div className="mt-8 grid gap-4">
@@ -675,7 +675,7 @@ export default function Home() {
 
               <div data-reveal="right">
                 <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[var(--landing-accent)]">
-                  Why SuperVendor?
+                  Why Jenko Coffee Vendor?
                 </p>
                 <h2 className="mt-4 max-w-[12ch] font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-[var(--landing-brand-strong)] sm:text-5xl">
                   Faster stops. Clearer invoices.
@@ -779,7 +779,7 @@ export default function Home() {
           <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-4">
             <div>
               <p className="font-[family:var(--font-space-grotesk)] text-2xl font-semibold tracking-[-0.05em]">
-                SuperVendor
+                Jenko Coffee Vendor
               </p>
               <p className="mt-4 max-w-xs text-sm leading-7 text-white/74">
                 Fast delivery tools with live sync and instant printing.
@@ -787,7 +787,7 @@ export default function Home() {
             </div>
 
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/52">Why SuperVendor?</p>
+              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/52">Why Jenko Coffee Vendor?</p>
               <div className="mt-4 space-y-3 text-sm text-white/76">
                 <p>Faster delivery stops.</p>
                 <p>Fewer mistakes.</p>
@@ -822,7 +822,7 @@ export default function Home() {
           </div>
 
           <div className="mt-12 border-t border-white/10 pt-6 text-sm text-white/52">
-            Copyright {currentYear} SuperVendor.
+            Copyright {currentYear} Jenko Coffee Vendor.
           </div>
         </div>
       </footer>

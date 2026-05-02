@@ -9,8 +9,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Vendor Management System",
-  description: "Vendor Management System - Admin Dashboard",
+  title: "Jenko Coffee Vendor",
+  description: "Jenko Coffee Vendor - Admin Dashboard",
 };
 
 export default function RootLayout({
