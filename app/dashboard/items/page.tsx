@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Plus, Package, Edit, Trash2, X, Search, Layers, Boxes } from 'lucide-react';
+import { Plus, Package, Edit, Trash2, X, Search, Layers, Boxes, Users, DollarSign } from 'lucide-react';
 import { API_URL } from '@/lib/config';
 import ConfirmModal from '@/components/ConfirmModal';
 
 export default function ItemsPage() {
   const [items, setItems] = useState<any[]>([]);
+  const [customers, setCustomers] = useState<any[]>([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({
     description_name: '', price: '', description: '',
@@ -22,18 +23,25 @@ export default function ItemsPage() {
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const [itemCustomerPrices, setItemCustomerPrices] = useState<any[]>([]);
+  const [newCustPrice, setNewCustPrice] = useState({ customer_id: '', price: '' });
+
   const [searchTerm, setSearchTerm] = useState('');
 
   const fetchData = async () => {
     try {
-      const [itemsRes, catRes] = await Promise.all([
-        fetch(`${API_URL}/items`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } }),
-        fetch(`${API_URL}/categories`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` } })
+      const token = localStorage.getItem('token');
+      const [itemsRes, catRes, custRes] = await Promise.all([
+        fetch(`${API_URL}/items`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`${API_URL}/categories`, { headers: { 'Authorization': `Bearer ${token}` } }),
+        fetch(`${API_URL}/customers`, { headers: { 'Authorization': `Bearer ${token}` } })
       ]);
       const itemsData = await itemsRes.json();
       const catData = await catRes.json();
+      const custData = await custRes.json();
       if (itemsData.success) setItems(itemsData.data);
       if (catData.success) setCategories(catData.data);
+      if (custData.success) setCustomers(custData.data);
     } catch (err) {
       console.error(err);
     } finally {
@@ -44,6 +52,59 @@ export default function ItemsPage() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const fetchItemCustomerPrices = async (itemId: number) => {
+    try {
+      const res = await fetch(`${API_URL}/items/${itemId}/customer-prices`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+      });
+      const data = await res.json();
+      if (data.success) setItemCustomerPrices(data.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleAddCustomerPrice = async () => {
+    if (!newCustPrice.customer_id || !newCustPrice.price || !editId) return;
+    try {
+      const res = await fetch(`${API_URL}/items/${editId}/customer-prices`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify(newCustPrice)
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchItemCustomerPrices(editId);
+        setNewCustPrice({ customer_id: '', price: '' });
+      }
+    } catch (err) {
+      alert("Error adding customer price");
+    }
+  };
+
+  const handleRemoveCustomerPrice = async (customerId: number) => {
+    if (!editId) return;
+    try {
+      const res = await fetch(`${API_URL}/items/${editId}/customer-prices`, {
+        method: 'POST', // Backend uses POST with price: null/undefined to delete
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ customer_id: customerId, price: null })
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchItemCustomerPrices(editId);
+      }
+    } catch (err) {
+      alert("Error removing customer price");
+    }
+  };
 
   const filteredItems = items.filter(i => {
     const matchesCategory = selectedCategory === 'All' || (i.category_name || 'Uncategorized') === selectedCategory;
@@ -106,6 +167,7 @@ export default function ItemsPage() {
     setEditId(item.id);
     setIsEdit(true);
     setShowModal(true);
+    fetchItemCustomerPrices(item.id);
   };
 
   const handleDelete = (id: number) => {
@@ -178,6 +240,7 @@ export default function ItemsPage() {
               item_number: '', upc: '', cost: '', quantity_size: '', vendor_cost: '',
               category_id: ''
             });
+            setItemCustomerPrices([]);
             setShowModal(true);
           }}
           className="bg-orange-500 shadow-sm shadow-orange-200 text-white flex items-center justify-center gap-2 px-4 py-2 rounded-lg text-sm hover:bg-orange-600 transition-all font-medium"
@@ -222,7 +285,7 @@ export default function ItemsPage() {
               placeholder="Search product items..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-shadow"
+              className="w-full pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-orange-500/50 transition-shadow outline-none"
             />
           </div>
           {searchTerm && (
@@ -236,14 +299,14 @@ export default function ItemsPage() {
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gray-50 border-b border-gray-100">
-                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Description</th>
-                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Item #</th>
-                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Size / Qty</th>
-                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Unit Cost</th>
-                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Vendor Cost</th>
-                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">SRP</th>
-                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Category</th>
-                <th className="px-4 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right font-sans">Actions</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Description</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Item #</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Size / Qty</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Unit Cost</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Vendor Cost</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">SRP</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-left font-sans">Category</th>
+                <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right font-sans">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 bg-white">
@@ -322,7 +385,7 @@ export default function ItemsPage() {
       {showModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => setShowModal(false)} />
-          <div className="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-3xl w-full max-w-5xl max-h-[95vh] shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
             <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
@@ -337,86 +400,167 @@ export default function ItemsPage() {
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="px-8 py-6 space-y-6 flex-1 overflow-y-auto">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
-                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Product Nomenclature</h3>
+            <div className="flex-1 overflow-y-auto">
+              <form onSubmit={handleSubmit} className="px-8 py-6 space-y-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div className="space-y-4">
-                    <div>
-                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Standard Description</label>
-                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none" placeholder="e.g. Premium Lager" required
-                        value={formData.description_name} onChange={e => setFormData({ ...formData, description_name: e.target.value })} />
+                    <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Product Nomenclature</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Standard Description</label>
+                        <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none" placeholder="e.g. Premium Lager" required
+                          value={formData.description_name} onChange={e => setFormData({ ...formData, description_name: e.target.value })} />
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Item Number</label>
+                          <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="ITEM-001"
+                            value={formData.item_number} onChange={e => setFormData({ ...formData, item_number: e.target.value })} />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Quantity and Size</label>
+                          <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none" placeholder="ex: 12 pack 16 oz"
+                            value={formData.quantity_size} onChange={e => setFormData({ ...formData, quantity_size: e.target.value })} />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Category</label>
+                        <select 
+                          className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none appearance-none cursor-pointer"
+                          required
+                          value={formData.category_id} 
+                          onChange={e => setFormData({ ...formData, category_id: e.target.value })}
+                        >
+                          <option value="">-- Select Category --</option>
+                          {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                        </select>
+                      </div>
                     </div>
-                    <div>
-                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Quantity and Size</label>
-                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none" placeholder="ex: 12 pack 16 oz"
-                        value={formData.quantity_size} onChange={e => setFormData({ ...formData, quantity_size: e.target.value })} />
-                    </div>
-                    <div>
-                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Category</label>
-                      <select 
-                        className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none appearance-none cursor-pointer"
-                        required
-                        value={formData.category_id} 
-                        onChange={e => setFormData({ ...formData, category_id: e.target.value })}
-                      >
-                        <option value="">-- Select Category --</option>
-                        {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
-                      </select>
+                  </div>
+
+                  <div className="space-y-4">
+                    <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Financial Parameters</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Global UPC</label>
+                        <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="000000000000"
+                          value={formData.upc} onChange={e => setFormData({ ...formData, upc: e.target.value })} />
+                      </div>
+                      <div className="grid grid-cols-3 gap-3">
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Unit Cost</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
+                            <input type="number" step="0.01" className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="0.00"
+                              value={formData.cost} onChange={e => setFormData({ ...formData, cost: e.target.value })} />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Vendor Cost</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
+                            <input type="number" step="0.01" className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="0.00"
+                              value={formData.vendor_cost} onChange={e => setFormData({ ...formData, vendor_cost: e.target.value })} />
+                          </div>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">SRP (Default Price)</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
+                            <input type="number" step="0.01" className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="0.00" required
+                              value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="space-y-4">
-                  <h3 className="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Financial Parameters</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Global UPC</label>
-                      <input type="text" className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="000000000000"
-                        value={formData.upc} onChange={e => setFormData({ ...formData, upc: e.target.value })} />
+                {isEdit && (
+                  <div className="pt-8 border-t border-gray-100">
+                    <div className="flex items-center gap-2 mb-6">
+                      <Users className="w-4 h-4 text-orange-600" />
+                      <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-[0.2em]">Customer Specific Prices</h3>
                     </div>
-                    <div className="grid grid-cols-3 gap-3">
-                      <div>
-                        <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Unit Cost</label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
-                          <input type="number" step="0.01" className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="0.00"
-                            value={formData.cost} onChange={e => setFormData({ ...formData, cost: e.target.value })} />
+                    
+                    <div className="bg-slate-50 rounded-2xl p-6 border border-gray-100">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                        <div className="md:col-span-1">
+                          <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Select Customer</label>
+                          <select 
+                            className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-medium outline-none appearance-none cursor-pointer"
+                            value={newCustPrice.customer_id}
+                            onChange={e => setNewCustPrice({ ...newCustPrice, customer_id: e.target.value })}
+                          >
+                            <option value="">-- Choose Customer --</option>
+                            {customers.map(c => (
+                              <option key={c.id} value={c.id}>{c.dba || c.registered_company_name}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Special Price</label>
+                          <div className="relative">
+                            <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
+                            <input 
+                              type="number" 
+                              step="0.01" 
+                              className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" 
+                              placeholder="0.00"
+                              value={newCustPrice.price}
+                              onChange={e => setNewCustPrice({ ...newCustPrice, price: e.target.value })}
+                            />
+                          </div>
+                        </div>
+                        <div className="flex items-end">
+                          <button 
+                            type="button"
+                            onClick={handleAddCustomerPrice}
+                            className="w-full px-4 py-2 bg-slate-900 text-white font-bold rounded-lg hover:bg-slate-800 transition text-xs uppercase tracking-widest"
+                          >
+                            Add Special Price
+                          </button>
                         </div>
                       </div>
-                      <div>
-                        <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Vendor Cost</label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
-                          <input type="number" step="0.01" className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="0.00"
-                            value={formData.vendor_cost} onChange={e => setFormData({ ...formData, vendor_cost: e.target.value })} />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">SRP</label>
-                        <div className="relative">
-                          <span className="absolute left-3 top-2 text-gray-400 text-xs">$</span>
-                          <input type="number" step="0.01" className="w-full pl-6 pr-3 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition text-sm font-mono outline-none" placeholder="0.00" required
-                            value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} />
-                        </div>
+
+                      <div className="space-y-2">
+                        {itemCustomerPrices.length > 0 ? (
+                          itemCustomerPrices.map(cp => (
+                            <div key={cp.customer_id} className="flex items-center justify-between p-3 bg-white border border-gray-100 rounded-xl shadow-sm">
+                              <div className="flex flex-col">
+                                <span className="text-xs font-bold text-slate-900">{cp.customer_name}</span>
+                                <span className="text-[10px] text-slate-400">{cp.customer_email}</span>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                <span className="text-sm font-black text-emerald-600">$ {parseFloat(cp.price).toFixed(2)}</span>
+                                <button 
+                                  type="button"
+                                  onClick={() => handleRemoveCustomerPrice(cp.customer_id)}
+                                  className="p-1.5 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-center py-8 text-slate-400">
+                            <p className="text-xs font-medium italic">No customer-specific pricing defined for this item.</p>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
 
-                <div className="md:col-span-2">
-                  <label className="block text-[10px] font-black text-slate-500 mb-1.5 uppercase tracking-widest">Internal System Notes</label>
-                  <textarea className="w-full px-4 py-2 bg-white border border-gray-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/10 rounded-lg transition resize-none h-20 text-sm font-medium outline-none" placeholder="Detailed product specifications..."
-                    value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
+                <div className="pt-8 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
+                  <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-bold text-slate-500 rounded-lg hover:bg-gray-50 transition uppercase text-[10px] tracking-widest">Cancel</button>
+                  <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-orange-600 text-white font-black rounded-lg hover:bg-orange-700 shadow-lg shadow-orange-100 transition disabled:opacity-50 uppercase text-[10px] tracking-widest">
+                    {submitting ? (isEdit ? 'Updating...' : 'Submitting...') : (isEdit ? 'Update Record' : 'Submit')}
+                  </button>
                 </div>
-              </div>
-              <div className="pt-8 border-t border-gray-100 flex justify-end gap-3 bg-white mt-auto">
-                <button type="button" onClick={() => setShowModal(false)} className="px-6 py-2.5 font-bold text-slate-500 rounded-lg hover:bg-gray-50 transition uppercase text-[10px] tracking-widest">Cancel</button>
-                <button type="submit" disabled={submitting} className="px-8 py-2.5 bg-orange-600 text-white font-black rounded-lg hover:bg-orange-700 shadow-lg shadow-orange-100 transition disabled:opacity-50 uppercase text-[10px] tracking-widest">
-                  {submitting ? (isEdit ? 'Updating...' : 'Submitting...') : (isEdit ? 'Update Record' : 'Submit')}
-                </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       )}
