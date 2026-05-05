@@ -9,7 +9,7 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "ColdFire Coffee | Premium Roasts & Equipment",
+  title: "Jenko Coffee | Premium Roasts & Equipment",
   description: "Premium coffee distribution and professional equipment solutions for businesses.",
 };
 

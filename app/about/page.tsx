@@ -34,7 +34,7 @@ export default function AboutPage() {
                   Quality without Compromise.
                 </h1>
                 <p className="mt-8 text-lg leading-8 text-[#5b6778]">
-                  At ColdFire Coffee, we believe that convenience should never compromise quality. What started as a local roasting operation has grown into a full-service beverage partnership for businesses across the region.
+                  At Jenko Coffee, we believe that convenience should never compromise quality. What started as a local roasting operation has grown into a full-service beverage partnership for businesses across the region.
                 </p>
                 <p className="mt-6 text-lg leading-8 text-[#5b6778]">
                   We provide the powerhouse behind the counter, from artisan beans to professional-grade equipment, ensuring your customers keep coming back for more.
@@ -56,7 +56,7 @@ export default function AboutPage() {
           <div className="mx-auto max-w-7xl">
             <div className="text-center">
               <h2 className="font-[family:var(--font-space-grotesk)] text-4xl font-bold text-[#0d1b2b] sm:text-5xl">
-                The ColdFire Values
+                The Jenko Values
               </h2>
             </div>
             <div className="mt-20 grid gap-12 sm:grid-cols-2 lg:grid-cols-4">

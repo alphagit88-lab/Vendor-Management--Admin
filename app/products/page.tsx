@@ -103,7 +103,7 @@ export default function ProductsPage() {
             <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
               <div>
                 <h2 className="font-[family:var(--font-space-grotesk)] text-4xl font-bold tracking-tight sm:text-5xl">
-                  The ColdFire Standard
+                  The Jenko Standard
                 </h2>
                 <div className="mt-10 space-y-8">
                   <div className="flex gap-6">

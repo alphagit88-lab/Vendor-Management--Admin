@@ -370,19 +370,6 @@ export default function Home() {
                     </p>
 
                     <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                      <Link
-                        href="/login"
-                        className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--landing-accent)] px-7 py-3.5 text-sm font-semibold text-white shadow-[0_18px_48px_rgba(200,108,73,0.30)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_56px_rgba(200,108,73,0.36)]"
-                      >
-                        Login
-                        <ArrowRight className="h-4 w-4" />
-                      </Link>
-                      <Link
-                        href="#overview"
-                        className="inline-flex items-center justify-center rounded-full border border-white/14 bg-white/8 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/14"
-                      >
-                        Learn More
-                      </Link>
                     </div>
 
                     <div className="mt-10 flex flex-wrap gap-3">
@@ -481,7 +468,7 @@ export default function Home() {
 
               <div data-reveal="right">
                 <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[var(--landing-accent)]">
-                  The ColdFire standard
+                  The Jenko standard
                 </p>
                 <h2 className="mt-4 max-w-[13ch] font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-[var(--landing-brand-strong)] sm:text-5xl">
                   Premium Roasts & Flavors.
@@ -576,7 +563,7 @@ export default function Home() {
 
               <div data-reveal="right">
                 <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[var(--landing-accent)]">
-                  Why Choose ColdFire Coffee?
+                  Why Choose Jenko Coffee?
                 </p>
                 <h2 className="mt-4 max-w-[12ch] font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-[var(--landing-brand-strong)] sm:text-5xl">
                   Fueling your business growth.
@@ -684,7 +671,7 @@ export default function Home() {
             </p>
             <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link
-                href="/login"
+                href="/contact"
                 className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--landing-accent)] px-8 py-4 text-base font-bold text-white shadow-[0_20px_50px_rgba(200,108,73,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_60px_rgba(200,108,73,0.4)]"
               >
                 Contact Us for a Consultation

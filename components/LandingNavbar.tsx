@@ -46,7 +46,7 @@ export default function LandingNavbar() {
             <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm">
               <Image
                 src="/lgoNewWeb.jpeg"
-                alt="ColdFire Coffee logo"
+                alt="Jenko Coffee logo"
                 fill
                 sizes="48px"
                 priority
@@ -55,7 +55,7 @@ export default function LandingNavbar() {
             </div>
             <div className="min-w-0">
               <p className="truncate font-[family:var(--font-space-grotesk)] text-xl font-bold tracking-[-0.05em] text-[#0d1b2b]">
-                ColdFire Coffee
+                Jenko Coffee
               </p>
               <p className="truncate text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[#5b6778]">
                 Roasts. Equipment. Service.
@@ -74,15 +74,6 @@ export default function LandingNavbar() {
               </Link>
             ))}
           </nav>
-
-          <div className="hidden items-center gap-3 lg:flex">
-            <Link
-              href="/login"
-              className="inline-flex items-center justify-center rounded-full bg-[#c86c49] px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_44px_rgba(200,108,73,0.28)] transition hover:-translate-y-0.5"
-            >
-              Partner Login
-            </Link>
-          </div>
 
           <button
             type="button"
@@ -106,13 +97,6 @@ export default function LandingNavbar() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/login"
-                className="mt-2 inline-flex items-center justify-center rounded-2xl bg-[#c86c49] px-4 py-3 text-sm font-semibold text-white"
-                onClick={() => setMenuOpen(false)}
-              >
-                Partner Login
-              </Link>
             </nav>
           </div>
         )}
