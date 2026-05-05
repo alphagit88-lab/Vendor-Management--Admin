@@ -9,8 +9,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Jenko Coffee Vendor",
-  description: "Jenko Coffee Vendor - Admin Dashboard",
+  title: "ColdFire Coffee | Premium Roasts & Equipment",
+  description: "Premium coffee distribution and professional equipment solutions for businesses.",
 };
 
 export default function RootLayout({

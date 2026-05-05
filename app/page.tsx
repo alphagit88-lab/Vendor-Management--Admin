@@ -12,19 +12,26 @@ import {
   ChevronLeft,
   ChevronRight,
   Menu,
-  Printer,
-  ScanLine,
+  Coffee,
+  Zap,
   ShieldCheck,
   Truck,
-  Waypoints,
+  Award,
+  Smile,
+  Thermometer,
   X,
 } from 'lucide-react';
-import image1 from '@/src/1.jpeg';
-import image2 from '@/src/2.jpeg';
-import image3 from '@/src/3.jpeg';
-import image4 from '@/src/4.jpeg';
-import image5 from '@/src/5.jpeg';
-import image6 from '@/src/6.jpeg';
+import LandingNavbar from '@/components/LandingNavbar';
+import LandingFooter from '@/components/LandingFooter';
+import image1 from '@/src/sld1.jpeg';
+import image2 from '@/src/sld2.jpeg';
+import image3 from '@/src/sld3.jpeg';
+import image4 from '@/src/sld1.jpeg';
+import image5 from '@/src/sld2.jpeg';
+import image6 from '@/src/sld3.jpeg';
+import sld1 from '@/src/sld1.jpeg';
+import sld2 from '@/src/sld2.jpeg';
+import sld3 from '@/src/sld3.jpeg';
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
@@ -45,12 +52,7 @@ const themeVars: CSSProperties = {
   ['--landing-highlight' as string]: '#5f9ea0',
 };
 
-const navLinks = [
-  { label: 'Home', href: '#home' },
-  { label: 'Overview', href: '#overview' },
-  { label: 'Why Jenko Coffee Vendor?', href: '#workflow' },
-  { label: 'Steps', href: '#services' },
-];
+// navLinks moved to LandingNavbar
 
 const heroSlides: Array<{
   eyebrow: string;
@@ -61,119 +63,118 @@ const heroSlides: Array<{
   spotlight: string;
 }> = [
     {
-      eyebrow: 'Smart Delivery System',
-      title: 'Faster Deliveries. Zero Errors.',
+      eyebrow: 'Premium Beverage Solutions',
+      title: 'The Ultimate Destination for C-Store Coffee.',
       description:
-        'Scan, sync, and print invoices in seconds. Keep your drivers moving and your customers happy.',
-      image: image1,
-      alt: 'Delivery driver beside a stocked vehicle holding a portable invoice printer.',
-      spotlight: 'Portable printing at the curb',
+        'Premium roasts, reliable equipment, and flavors your customers will keep coming back for.',
+      image: sld1,
+      alt: 'Freshly brewed premium coffee in a professional c-store setting.',
+      spotlight: 'Quality roasts for every customer',
     },
     {
-      eyebrow: 'Smart Invoice Control',
-      title: 'Invoicing Just Got Smarter.',
-      description: 'Create invoices instantly with live delivery updates.',
-      image: image6,
-      alt: 'Portable invoice printer producing printed receipts beside a stack of invoices.',
-      spotlight: 'Print at the stop',
+      eyebrow: 'Texas-Sized Variety',
+      title: 'Elevate Your Beverage Program.',
+      description: 'From Bold Dark Roast to Texas Pecan, we provide the variety that drives morning foot traffic.',
+      image: sld2,
+      alt: 'A variety of coffee blends and roasts displayed in a modern cafe environment.',
+      spotlight: 'Drive more morning visits',
     },
     {
-      eyebrow: 'Live Route Sync',
-      title: 'Deliver. Sync. Print. Done.',
-      description: 'One simple flow for drivers, stores, and invoices.',
-      image: image5,
-      alt: 'Delivery team unloading a vehicle while another worker updates stock from a handheld device.',
-      spotlight: 'One system for every stop',
+      eyebrow: 'Professional Equipment',
+      title: 'Smart Solutions, Bold Flavor.',
+      description: 'Professional-grade cappuccino and coffee machines tailored for the fast-paced retail environment.',
+      image: sld3,
+      alt: 'High-end cappuccino and coffee machines ready for retail use.',
+      spotlight: 'Reliable machines for high volume',
     },
   ];
 
 const proofTags = [
-  'Scan fast',
-  'Sync live',
-  'Print instantly',
+  'Colombian & Texas Pecan',
+  'Artisan Cappuccinos',
+  'High-Volume Equipment',
 ];
 
 const overviewChecks = [
-  'Scan products as soon as they leave the vehicle.',
-  'Keep store and delivery data updated live.',
-  'Print invoices on-site in seconds.',
-  'Reduce mistakes and save time.',
+  'Colombian: A classic, medium-bodied brew with a smooth finish.',
+  'Texas Pecan: A local favorite with rich, nutty undertones.',
+  'Dark Roast: Deep, bold, and intense for those who need a serious wake-up call.',
+  'Artisan Cappuccinos: Creamy, frothy, and available in a variety of flavors.',
 ];
 
 const statCards = [
   {
-    value: '03',
-    label: 'Core actions',
-    description: 'Scan stock, sync records, and print invoices in one route-ready loop.',
-    icon: ScanLine,
+    value: '15+',
+    label: 'Premium Blends',
+    description: 'Curated selection of roasts and flavors designed for high-traffic environments.',
+    icon: Coffee,
   },
   {
-    value: '06',
-    label: 'Field touchpoints',
-    description: 'From loading the vehicle to shelf refill, every stop stays visible and connected.',
-    icon: Waypoints,
+    value: '24/7',
+    label: 'Reliable Support',
+    description: 'Round-the-clock service to ensure your beverage program never skips a beat.',
+    icon: Zap,
   },
   {
-    value: '01',
-    label: 'One simple system',
-    description: 'Drivers and stores stay on the same page.',
-    icon: Printer,
+    value: '99%',
+    label: 'Cup Consistency',
+    description: 'Precision brewing parameters for the perfect taste in every single cup.',
+    icon: Award,
   },
 ];
 
 const reasons = [
   {
-    title: 'Scan once at the stop',
-    description: 'Capture items and quantities right away.',
+    title: 'Full-Service Partnership',
+    description: 'From machine installation to regular bean delivery, we handle the details so you can run your business.',
   },
   {
-    title: 'Sync in real time',
-    description: 'Updates appear instantly without extra typing.',
+    title: 'Increased Foot Traffic',
+    description: 'A high-quality coffee program is the #1 way to build a loyal "regular" customer base.',
   },
   {
-    title: 'Print before pulling away',
-    description: 'Give the customer an invoice before the driver leaves.',
+    title: 'Modern Branding',
+    description: 'Our sleek, eye-catching signage and decals enhance your store’s interior aesthetic.',
   },
 ];
 
 const serviceCards = [
   {
-    eyebrow: 'Step 01',
-    title: 'Arrival Scanning',
-    description: 'Scan items at the start of the stop.',
+    eyebrow: 'Performance',
+    title: 'High-Volume Gear',
+    description: 'Built to handle the morning rush without slowing down.',
     image: image5,
-    alt: 'Delivery team unloading a vehicle and using handheld devices.',
+    alt: 'High-volume coffee machine for retail environments.',
     featured: false,
   },
   {
-    eyebrow: 'Step 02',
-    title: 'Shelf Refill Sync',
-    description: 'Update stock while items go to the shelf.',
+    eyebrow: 'Interface',
+    title: 'User-Friendly',
+    description: 'Simple for customers to use and easy for staff to maintain.',
     image: image3,
-    alt: 'Driver organizing snacks and supplies inside a convenience store aisle.',
+    alt: 'Interactive touchscreen interface on a modern coffee machine.',
     featured: false,
   },
   {
-    eyebrow: 'Step 03',
-    title: 'Invoice Review',
-    description: 'Check the order with the customer.',
+    eyebrow: 'Quality',
+    title: 'Precision Brewing',
+    description: 'Precision temperature and mixing for the perfect taste every time.',
     image: image2,
-    alt: 'Two team members reviewing boxes and invoice paperwork inside a convenience store.',
+    alt: 'Consistency in every cup with our precision equipment.',
     featured: false,
   },
   {
-    eyebrow: 'Step 04',
-    title: 'Instant Printout',
-    description: 'Print the invoice right there on the spot.',
+    eyebrow: 'Variety',
+    title: 'Artisan Flavors',
+    description: 'Seasonal and staple flavors that drive loyal foot traffic.',
     image: image6,
-    alt: 'Portable printer creating a printed invoice.',
+    alt: 'A selection of artisan cappuccino and coffee flavors.',
     featured: true,
   },
 ];
 
 export default function Home() {
   const [activeSlide, setActiveSlide] = useState(0);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [showTopButton, setShowTopButton] = useState(false);
 
   const advanceSlide = useEffectEvent((direction: 1 | -1 = 1) => {
@@ -229,16 +230,8 @@ export default function Home() {
     };
   }, []);
 
-  useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = menuOpen ? 'hidden' : '';
+  // Removed menuOpen effect since it's now in LandingNavbar
 
-    return () => {
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [menuOpen]);
-
-  const currentYear = new Date().getFullYear();
   const currentSlide = heroSlides[activeSlide];
 
   return (
@@ -314,99 +307,7 @@ export default function Home() {
         }
       `}</style>
 
-      <header className="fixed inset-x-0 top-0 z-50">
-        <div className="bg-[var(--landing-brand-strong)] text-white">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-            <div className="flex items-center gap-2 text-[0.72rem] font-semibold uppercase tracking-[0.28em] text-white/80">
-              <ScanLine className="h-4 w-4 text-[var(--landing-highlight)]" />
-              Real-time route invoicing for delivery teams
-            </div>
-            <div className="hidden items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-xs font-semibold text-white/88 backdrop-blur md:flex">
-              <Printer className="h-4 w-4 text-[var(--landing-accent)]" />
-              On-site print ready
-            </div>
-          </div>
-        </div>
-
-        <div className="border-b border-black/5 bg-[rgba(255,250,244,0.92)] shadow-[0_12px_36px_rgba(16,32,51,0.08)] backdrop-blur-xl">
-          <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-4 sm:px-6 lg:px-8">
-            <Link href="#home" className="flex min-w-0 items-center gap-3" onClick={() => setMenuOpen(false)}>
-              <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-black/5 bg-white shadow-sm">
-                <Image
-                  src="/lgoNewWeb.jpeg"
-                  alt="Jenko Coffee Vendor logo"
-                  fill
-                  sizes="48px"
-                  priority
-                  className="object-contain p-1.5"
-                />
-              </div>
-              <div className="min-w-0">
-                <p className="truncate font-[family:var(--font-space-grotesk)] text-xl font-bold tracking-[-0.05em] text-[var(--landing-brand-strong)]">
-                  Jenko Coffee Vendor
-                </p>
-                <p className="truncate text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[var(--landing-muted)]">
-                  Scan. Sync. Print.
-                </p>
-              </div>
-            </Link>
-
-            <nav className="hidden items-center gap-1 lg:flex">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="rounded-full px-4 py-2 text-sm font-medium text-[var(--landing-muted)] transition hover:bg-[var(--landing-accent-soft)] hover:text-[var(--landing-brand-strong)]"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-
-            <div className="hidden items-center gap-3 lg:flex">
-              <Link
-                href="/login"
-                className="inline-flex items-center justify-center rounded-full bg-[var(--landing-accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_44px_rgba(200,108,73,0.28)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_54px_rgba(200,108,73,0.34)]"
-              >
-                Login
-              </Link>
-            </div>
-
-            <button
-              type="button"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-black/6 bg-white text-[var(--landing-brand-strong)] shadow-sm lg:hidden"
-              aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-              onClick={() => setMenuOpen((current) => !current)}
-            >
-              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-          </div>
-
-          {menuOpen ? (
-            <div className="border-t border-black/6 bg-[var(--landing-surface)] lg:hidden">
-              <nav className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-4 sm:px-6">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="rounded-2xl px-4 py-3 text-sm font-semibold text-[var(--landing-brand-strong)] transition hover:bg-[var(--landing-surface-strong)]"
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-                <Link
-                  href="/login"
-                  className="mt-2 inline-flex items-center justify-center rounded-2xl bg-[var(--landing-accent)] px-4 py-3 text-sm font-semibold text-white"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Login
-                </Link>
-              </nav>
-            </div>
-          ) : null}
-        </div>
-      </header>
+      <LandingNavbar />
 
       <main className="pt-[116px]">
         <section id="home" className="relative isolate overflow-hidden scroll-mt-32">
@@ -580,13 +481,13 @@ export default function Home() {
 
               <div data-reveal="right">
                 <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[var(--landing-accent)]">
-                  Overview
+                  The ColdFire standard
                 </p>
                 <h2 className="mt-4 max-w-[13ch] font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-[var(--landing-brand-strong)] sm:text-5xl">
-                  Simple tools for faster stops.
+                  Premium Roasts & Flavors.
                 </h2>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--landing-muted)]">
-                  Jenko Coffee Vendor helps drivers scan items, sync updates, and print invoices without slowing down.
+                  We believe that convenience should never compromise quality. Our signature lineup is designed for the modern palate.
                 </p>
 
                 <div className="mt-8 grid gap-4">
@@ -612,19 +513,19 @@ export default function Home() {
                         <Truck className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-[var(--landing-brand-strong)]">Easy for drivers</p>
-                        <p className="text-sm text-[var(--landing-muted)]">Scan, update, confirm.</p>
+                        <p className="text-sm font-semibold text-[var(--landing-brand-strong)]">Reliable Supply</p>
+                        <p className="text-sm text-[var(--landing-muted)]">On-time bean delivery.</p>
                       </div>
                     </div>
                   </div>
                   <div className="rounded-[1.8rem] border border-black/6 bg-white p-5 shadow-[0_18px_50px_rgba(17,32,51,0.06)]">
                     <div className="flex items-center gap-3">
                       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[var(--landing-accent)] text-white">
-                        <Printer className="h-5 w-5" />
+                        <Zap className="h-5 w-5" />
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-[var(--landing-brand-strong)]">Easy for stores</p>
-                        <p className="text-sm text-[var(--landing-muted)]">Get the invoice instantly.</p>
+                        <p className="text-sm font-semibold text-[var(--landing-brand-strong)]">Consistent Quality</p>
+                        <p className="text-sm text-[var(--landing-muted)]">Precision brewing every time.</p>
                       </div>
                     </div>
                   </div>
@@ -675,13 +576,13 @@ export default function Home() {
 
               <div data-reveal="right">
                 <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[var(--landing-accent)]">
-                  Why Jenko Coffee Vendor?
+                  Why Choose ColdFire Coffee?
                 </p>
                 <h2 className="mt-4 max-w-[12ch] font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-[var(--landing-brand-strong)] sm:text-5xl">
-                  Faster stops. Clearer invoices.
+                  Fueling your business growth.
                 </h2>
                 <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--landing-muted)]">
-                  It keeps delivery simple from the vehicle to the counter.
+                  We handle the details of your beverage program so you can focus on running your business.
                 </p>
 
                 <div className="mt-8 space-y-5">
@@ -725,17 +626,17 @@ export default function Home() {
           <div className="mx-auto max-w-7xl">
             <div className="mx-auto max-w-3xl text-center" data-reveal="zoom">
               <p className="text-xs font-semibold uppercase tracking-[0.34em] text-[var(--landing-accent)]">
-                Delivery Steps
+                Equipment
               </p>
               <h2 className="mt-4 font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-[0.95] tracking-[-0.06em] text-[var(--landing-brand-strong)] sm:text-5xl">
-                Four simple steps at every stop.
+                Reliable Equipment Solutions.
               </h2>
               <p className="mt-6 text-lg leading-8 text-[var(--landing-muted)]">
-                Scan, update, check, and print.
+                The powerhouse behind your counter, built for performance and consistency.
               </p>
             </div>
 
-            <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+            <div id="equipment" className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-4">
               {serviceCards.map((card, index) => (
                 <div
                   key={card.title}
@@ -772,60 +673,29 @@ export default function Home() {
             </div>
           </div>
         </section>
-      </main>
 
-      <footer className="bg-[var(--landing-brand)] px-4 py-16 text-white sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-4">
-            <div>
-              <p className="font-[family:var(--font-space-grotesk)] text-2xl font-semibold tracking-[-0.05em]">
-                Jenko Coffee Vendor
-              </p>
-              <p className="mt-4 max-w-xs text-sm leading-7 text-white/74">
-                Fast delivery tools with live sync and instant printing.
-              </p>
-            </div>
-
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/52">Why Jenko Coffee Vendor?</p>
-              <div className="mt-4 space-y-3 text-sm text-white/76">
-                <p>Faster delivery stops.</p>
-                <p>Fewer mistakes.</p>
-                <p>Instant invoices.</p>
-              </div>
-            </div>
-
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/52">Quick Links</p>
-              <div className="mt-4 flex flex-col gap-3 text-sm text-white/76">
-                {navLinks.map((link) => (
-                  <Link key={link.label} href={link.href} className="transition hover:text-white">
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/52">Access</p>
-              <p className="mt-4 max-w-xs text-sm leading-7 text-white/76">
-                Ready to get started?
-              </p>
+        <section className="bg-[var(--landing-brand-strong)] px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
+          <div className="mx-auto max-w-5xl text-center" data-reveal="zoom">
+            <h2 className="font-[family:var(--font-space-grotesk)] text-4xl font-bold leading-tight tracking-[-0.04em] text-white sm:text-5xl lg:text-6xl">
+              Ready to Upgrade Your Coffee Station?
+            </h2>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-white/72 sm:text-xl">
+              Take the first step toward a superior beverage program that drives traffic and loyalty.
+            </p>
+            <div className="mt-10 flex flex-wrap justify-center gap-4">
               <Link
                 href="/login"
-                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-[var(--landing-accent)] px-5 py-3 text-sm font-semibold text-white shadow-[0_18px_40px_rgba(0,0,0,0.18)] transition hover:-translate-y-0.5"
+                className="inline-flex items-center justify-center gap-2 rounded-full bg-[var(--landing-accent)] px-8 py-4 text-base font-bold text-white shadow-[0_20px_50px_rgba(200,108,73,0.3)] transition hover:-translate-y-0.5 hover:shadow-[0_24px_60px_rgba(200,108,73,0.4)]"
               >
-                Login
-                <ArrowRight className="h-4 w-4" />
+                Contact Us for a Consultation
+                <ArrowRight className="h-5 w-5" />
               </Link>
             </div>
           </div>
+        </section>
+      </main>
 
-          <div className="mt-12 border-t border-white/10 pt-6 text-sm text-white/52">
-            Copyright {currentYear} Jenko Coffee Vendor.
-          </div>
-        </div>
-      </footer>
+      <LandingFooter />
 
       {showTopButton ? (
         <button
