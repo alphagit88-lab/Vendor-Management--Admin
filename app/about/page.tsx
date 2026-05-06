@@ -34,10 +34,13 @@ export default function AboutPage() {
                   Quality without Compromise.
                 </h1>
                 <p className="mt-8 text-lg leading-8 text-[#5b6778]">
-                  At Jenko Coffee, we believe that convenience should never compromise quality. What started as a local roasting operation has grown into a full-service beverage partnership for businesses across the region.
+                  With over 35 years of experience in the coffee industry, we are a family-run business dedicated to treating every customer like part of our own. We provide a complete coffee program, offering high-quality products, state-of-the-art equipment, and bean-to-cup solutions tailored to your needs.
                 </p>
                 <p className="mt-6 text-lg leading-8 text-[#5b6778]">
-                  We provide the powerhouse behind the counter, from artisan beans to professional-grade equipment, ensuring your customers keep coming back for more.
+                  Serving over 300 convenience stores, we take pride in delivering reliable, in-house service you can count on. Our coffee is consistently graded above our competitors, ensuring a superior experience in every cup.
+                </p>
+                <p className="mt-6 text-lg leading-8 text-[#5b6778] font-semibold italic">
+                  Our goal is simple: to be your best and most trusted vendor.
                 </p>
               </div>
               <div className="order-1 lg:order-2 relative aspect-[4/5] overflow-hidden rounded-[3rem] shadow-2xl">

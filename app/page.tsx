@@ -60,7 +60,6 @@ const heroSlides: Array<{
   description: string;
   image: StaticImageData;
   alt: string;
-  spotlight: string;
 }> = [
     {
       eyebrow: 'Premium Beverage Solutions',
@@ -69,7 +68,6 @@ const heroSlides: Array<{
         'Premium roasts, reliable equipment, and flavors your customers will keep coming back for.',
       image: sld1,
       alt: 'Freshly brewed premium coffee in a professional c-store setting.',
-      spotlight: 'Quality roasts for every customer',
     },
     {
       eyebrow: 'Texas-Sized Variety',
@@ -77,7 +75,6 @@ const heroSlides: Array<{
       description: 'From Bold Dark Roast to Texas Pecan, we provide the variety that drives morning foot traffic.',
       image: sld2,
       alt: 'A variety of coffee blends and roasts displayed in a modern cafe environment.',
-      spotlight: 'Drive more morning visits',
     },
     {
       eyebrow: 'Professional Equipment',
@@ -85,7 +82,6 @@ const heroSlides: Array<{
       description: 'Professional-grade cappuccino and coffee machines tailored for the fast-paced retail environment.',
       image: sld3,
       alt: 'High-end cappuccino and coffee machines ready for retail use.',
-      spotlight: 'Reliable machines for high volume',
     },
   ];
 
@@ -385,26 +381,7 @@ export default function Home() {
                   </div>
                 </div>
 
-                <div className="hidden lg:block">
-                  <div className="ml-auto max-w-md rounded-[2rem] border border-white/12 bg-white/10 p-6 text-white shadow-[0_28px_70px_rgba(0,0,0,0.25)] backdrop-blur-xl">
-                    <p className="text-[0.68rem] font-semibold uppercase tracking-[0.3em] text-white/58">
-                      Why it helps
-                    </p>
-                    <p className="mt-3 font-[family:var(--font-space-grotesk)] text-3xl font-semibold leading-tight tracking-[-0.05em] text-white">
-                      {currentSlide.spotlight}
-                    </p>
-                    <div className="mt-5 space-y-3 text-sm leading-7 text-white/76">
-                      <div className="flex items-start gap-3">
-                        <Check className="mt-1 h-4 w-4 shrink-0 text-[var(--landing-highlight)]" />
-                        <span>Less waiting at each stop.</span>
-                      </div>
-                      <div className="flex items-start gap-3">
-                        <Check className="mt-1 h-4 w-4 shrink-0 text-[var(--landing-highlight)]" />
-                        <span>Fewer invoice mistakes.</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
 
@@ -455,13 +432,13 @@ export default function Home() {
 
                 <div className="absolute bottom-[9%] left-[8%] max-w-[16rem] rounded-[1.8rem] border border-[var(--landing-accent-soft)] bg-[var(--landing-surface)] p-5 shadow-[0_20px_50px_rgba(17,32,51,0.08)]">
                   <p className="text-[0.68rem] font-semibold uppercase tracking-[0.28em] text-[var(--landing-accent)]">
-                    Route snapshot
+                    Direct Service
                   </p>
                   <p className="mt-3 font-[family:var(--font-space-grotesk)] text-3xl font-semibold tracking-[-0.05em] text-[var(--landing-brand-strong)]">
-                    Live print. Live sync.
+                    Reliable Roasts.
                   </p>
                   <p className="mt-2 text-sm leading-7 text-[var(--landing-muted)]">
-                    Field teams can confirm, update, and print on-site without losing momentum.
+                    Our team ensures your station is always stocked with fresh beans and fully operational equipment.
                   </p>
                 </div>
               </div>

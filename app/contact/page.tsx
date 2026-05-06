@@ -39,7 +39,8 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-sm font-semibold text-[#5b6778]">Call Us</p>
-                      <p className="text-xl font-bold text-[#0d1b2b]">(800) COLD-FIRE</p>
+                      <p className="text-xl font-bold text-[#0d1b2b]">817-682-1182</p>
+                      <p className="text-xl font-bold text-[#0d1b2b]">817-929-2730</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-6">
