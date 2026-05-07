@@ -50,7 +50,7 @@ export default function LandingFooter() {
         </div>
 
         <div className="mt-12 border-t border-white/10 pt-6 text-sm text-white/52">
-          Copyright {currentYear} Jenko Coffee. All rights reserved.
+          © 2026 Jenko Coffee. All rights reserved. Powered by <Link href="https://cyberdreams.net" className='text-white hover:underline'>Cyber Dreams</Link>
         </div>
       </div>
     </footer>
