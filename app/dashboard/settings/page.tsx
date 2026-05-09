@@ -9,6 +9,7 @@ export default function SettingsPage() {
   const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
   
   const [settings, setSettings] = useState({
+    site_name: '',
     company_name: '',
     company_address: '',
     company_phone: ''
@@ -29,6 +30,7 @@ export default function SettingsPage() {
       const data = await response.json();
       if (data.success) {
         setSettings({
+          site_name: data.data.site_name || '',
           company_name: data.data.company_name || '',
           company_address: data.data.company_address || '',
           company_phone: data.data.company_phone || ''
@@ -108,6 +110,21 @@ export default function SettingsPage() {
                 onChange={(e) => setSettings({ ...settings, company_name: e.target.value })}
                 className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all duration-200 text-slate-900 font-semibold"
                 placeholder="Enter company name"
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="flex items-center gap-2 text-xs font-black text-slate-400 uppercase tracking-widest ml-1">
+                <Building2 className="w-3.5 h-3.5" />
+                Site Name
+              </label>
+              <input
+                type="text"
+                value={settings.site_name}
+                onChange={(e) => setSettings({ ...settings, site_name: e.target.value })}
+                className="w-full px-4 py-3 rounded-xl bg-slate-50 border-none ring-1 ring-slate-200 focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all duration-200 text-slate-900 font-semibold"
+                placeholder="Enter site name"
                 required
               />
             </div>

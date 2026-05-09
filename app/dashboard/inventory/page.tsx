@@ -213,6 +213,7 @@ export default function InventoryPage() {
                         <thead>
                             <tr className="bg-gray-50/50 border-b border-gray-100">
                                 <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Item Description</th>
+                                <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest">Category</th>
                                 {!selectedSubInventory.startsWith('SP_') && <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Warehouse</th>}
                                 {selectedSubInventory !== 'WAREHOUSE' && <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Staff Force</th>}
                                 {selectedSubInventory === 'ALL_STOCK' && <th className="px-6 py-4 text-[11px] font-black text-slate-400 uppercase tracking-widest text-center">Total</th>}
@@ -245,6 +246,9 @@ export default function InventoryPage() {
                                                 <span className="font-black text-slate-800 text-sm tracking-tight">{item.item_name}</span>
                                                 <span className="text-[10px] text-slate-400 font-mono font-bold tracking-tight uppercase">{item.item_number}</span>
                                             </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="text-xs font-medium text-indigo-600">{item.category_name || 'N/A'}</span>
                                         </td>
                                         {!selectedSubInventory.startsWith('SP_') && <td className="px-6 py-4 text-center font-bold text-slate-600">{warehouseStock}</td>}
                                         {selectedSubInventory !== 'WAREHOUSE' && <td className="px-6 py-4 text-center font-bold text-amber-600">+{staffStock}</td>}
