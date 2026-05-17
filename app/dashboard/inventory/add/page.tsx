@@ -14,6 +14,7 @@ interface Item {
 export default function AddInventoryPage() {
   const router = useRouter();
   const [items, setItems] = useState<Item[]>([]);
+  const [warehouses, setWarehouses] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -24,22 +25,30 @@ export default function AddInventoryPage() {
   const [quantity, setQuantity] = useState('');
   const [unitCost, setUnitCost] = useState('');
   const [notes, setNotes] = useState('');
+  const [selectedWarehouseId, setSelectedWarehouseId] = useState('');
 
   useEffect(() => {
-    fetchItems();
+    fetchData();
   }, []);
 
-  const fetchItems = async () => {
+  const fetchData = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/items`, {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-      });
-      const data = await res.json();
-      if (data.success) {
-        setItems(data.data);
+      const headers = { 'Authorization': `Bearer ${localStorage.getItem('token')}` };
+      const [itemsRes, whRes] = await Promise.all([
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/items`, { headers }),
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/warehouses`, { headers })
+      ]);
+      const itemsData = await itemsRes.json();
+      const whData = await whRes.json();
+      if (itemsData.success) setItems(itemsData.data);
+      if (whData.success) {
+        setWarehouses(whData.data);
+        if (whData.data.length > 0) {
+          setSelectedWarehouseId(whData.data[0].id.toString());
+        }
       }
     } catch (err) {
-      console.error('Failed to fetch items');
+      console.error('Failed to fetch data');
     } finally {
       setLoading(false);
     }
@@ -52,7 +61,7 @@ export default function AddInventoryPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedItem) return;
+    if (!selectedItem || !selectedWarehouseId) return;
 
     setSubmitting(true);
     setStatus(null);
@@ -69,13 +78,14 @@ export default function AddInventoryPage() {
           quantity_changed: parseInt(quantity),
           type: 'RESTOCK',
           notes: notes || 'Direct Inventory Addition',
-          unit_cost: parseFloat(unitCost)
+          unit_cost: parseFloat(unitCost),
+          warehouse_id: parseInt(selectedWarehouseId)
         })
       });
 
       const data = await res.json();
       if (data.success) {
-        setStatus({ type: 'success', message: `Stock added successfully for ${selectedItem.description_name}` });
+        setStatus({ type: 'success', message: `Stock added successfully to selected warehouse for ${selectedItem.description_name}` });
         // Reset form
         setSelectedItem(null);
         setQuantity('');
@@ -185,7 +195,7 @@ export default function AddInventoryPage() {
             {!selectedItem ? (
               <div className="p-12 text-center rounded-2xl border-2 border-dashed border-slate-100 flex flex-col items-center justify-center gap-4">
                 <div className="p-3 bg-slate-50 rounded-full">
-                    <Package className="w-8 h-8 text-slate-300" />
+                    <PackageIcon className="w-8 h-8 text-slate-300" />
                 </div>
                 <p className="text-slate-400 text-sm font-medium">Please select a product from the left list to continue.</p>
               </div>
@@ -198,6 +208,20 @@ export default function AddInventoryPage() {
                         <span>{selectedItem.description_name}</span>
                         <span className="text-xs font-medium text-indigo-400 mt-1 uppercase tracking-wider">{selectedItem.item_number}</span>
                     </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-semibold text-slate-700 mb-2">Target Warehouse</label>
+                    <select
+                      required
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-[15px] focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all font-bold outline-none cursor-pointer"
+                      value={selectedWarehouseId}
+                      onChange={e => setSelectedWarehouseId(e.target.value)}
+                    >
+                      {warehouses.map(w => (
+                        <option key={w.id} value={w.id}>🏢 {w.name}</option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
@@ -248,7 +272,7 @@ export default function AddInventoryPage() {
                   </div>
                   <button
                     type="submit"
-                    disabled={submitting || !quantity || !unitCost}
+                    disabled={submitting || !quantity || !unitCost || !selectedWarehouseId}
                     className="flex-1 flex items-center justify-center gap-2 px-6 py-4 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-100 hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-[1.02] active:scale-100 transition-all"
                   >
                     {submitting ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Save className="w-5 h-5" />}
@@ -264,8 +288,7 @@ export default function AddInventoryPage() {
   );
 }
 
-// Icon for step 2 empty state
-function Package(props: any) {
+function PackageIcon(props: any) {
     return (
         <svg
             {...props}

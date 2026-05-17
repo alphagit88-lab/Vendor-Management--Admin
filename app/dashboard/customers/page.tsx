@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Plus, Users, Search, Edit, Trash2, X, MapPin, Phone, Building2, UserPlus, Layers } from 'lucide-react';
+import { Plus, Users, Search, Edit, Trash2, X, MapPin, Phone, Building2, UserPlus, Layers, Target, RefreshCw } from 'lucide-react';
 import { API_URL } from '@/lib/config';
 import ConfirmModal from '@/components/ConfirmModal';
 import MapPicker from '@/components/MapPicker';
@@ -33,6 +33,14 @@ export default function CustomersPage() {
   const [showGroupDeleteConfirm, setShowGroupDeleteConfirm] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isGroupDeleting, setIsGroupDeleting] = useState(false);
+
+  const [showParModal, setShowParModal] = useState(false);
+  const [selectedParCustomer, setSelectedParCustomer] = useState<any>(null);
+  const [items, setItems] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedItemCategory, setSelectedItemCategory] = useState<number | 'all'>('all');
+  const [parLevels, setParLevels] = useState<Record<number, string>>({});
+  const [isSavingPars, setIsSavingPars] = useState(false);
 
   const fetchCustomers = async () => {
     try {
@@ -129,6 +137,57 @@ export default function CustomersPage() {
       alert(isGroupEdit ? "Error updating group" : "Error adding group");
     } finally {
       setGroupSubmitting(false);
+    }
+  };
+
+  const handleOpenParModal = async (customer: any) => {
+    setSelectedParCustomer(customer);
+    setParLevels(customer.par_levels || {});
+    setShowParModal(true);
+    setSelectedItemCategory('all');
+    
+    if (items.length === 0) {
+      try {
+        const token = localStorage.getItem('token');
+        const [itemsRes, catsRes] = await Promise.all([
+          fetch(`${API_URL}/items`, { headers: { 'Authorization': `Bearer ${token}` } }),
+          fetch(`${API_URL}/categories`, { headers: { 'Authorization': `Bearer ${token}` } })
+        ]);
+        const itemsData = await itemsRes.json();
+        const catsData = await catsRes.json();
+        if (itemsData.success) setItems(itemsData.data);
+        if (catsData.success) setCategories(catsData.data);
+      } catch (err) {
+        console.error("Error fetching items/categories", err);
+      }
+    }
+  };
+
+  const handleSaveParLevels = async () => {
+    if (!selectedParCustomer) return;
+    setIsSavingPars(true);
+    try {
+      const res = await fetch(`${API_URL}/customers/${selectedParCustomer.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          par_levels: parLevels
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setShowParModal(false);
+        fetchCustomers();
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      alert("Error saving par levels");
+    } finally {
+      setIsSavingPars(false);
     }
   };
 
@@ -334,6 +393,13 @@ export default function CustomersPage() {
                   </td>
                   <td className="px-6 py-3 whitespace-nowrap text-right">
                     <div className="flex items-center justify-end gap-1">
+                      <button
+                        onClick={() => handleOpenParModal(c)}
+                        className="p-1.5 text-blue-600 hover:bg-blue-50 rounded-lg transition-all font-medium"
+                        title="Set Par Levels"
+                      >
+                        <Target className="w-4 h-4" />
+                      </button>
                       <button
                         onClick={() => handleEdit(c)}
                         className="p-1.5 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all font-medium"
@@ -659,6 +725,118 @@ export default function CustomersPage() {
           </div>
         </div>
       )}
+
+      {showParModal && selectedParCustomer && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity" onClick={() => setShowParModal(false)} />
+          <div className="bg-white rounded-3xl w-full max-w-4xl max-h-[90vh] shadow-2xl relative z-10 overflow-hidden flex flex-col animate-in zoom-in-95 duration-200">
+            <div className="px-8 py-6 border-b border-gray-100 flex justify-between items-center bg-white">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                  <Target className="w-4 h-4" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-black tracking-tight text-slate-900 uppercase">
+                    Par Levels: {selectedParCustomer.dba || selectedParCustomer.registered_company_name}
+                  </h2>
+                  <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mt-0.5">Set inventory thresholds</p>
+                </div>
+              </div>
+              <button className="p-2 bg-gray-50 hover:bg-gray-100 rounded-full transition" onClick={() => setShowParModal(false)}>
+                <X className="w-5 h-5 text-gray-500" />
+              </button>
+            </div>
+
+            <div className="p-6 border-b border-gray-100 bg-slate-50/50">
+              <div className="flex flex-col sm:flex-row gap-4 items-end">
+                <div className="flex-1">
+                  <label className="block text-[10px] font-black text-slate-500 mb-2 uppercase tracking-widest">Filter by Category</label>
+                  <select
+                    className="w-full px-4 py-2 bg-white border border-gray-200 rounded-xl text-sm font-black focus:ring-2 focus:ring-blue-500/50 outline-none"
+                    value={selectedItemCategory}
+                    onChange={(e) => setSelectedItemCategory(e.target.value === 'all' ? 'all' : Number(e.target.value))}
+                  >
+                    <option value="all">All Categories</option>
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.id}>{cat.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-0">
+              <table className="w-full text-left border-collapse">
+                <thead className="sticky top-0 bg-white shadow-sm z-10">
+                  <tr className="bg-gray-50/90 backdrop-blur-sm border-b border-gray-100">
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest">Item Number</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest">Description</th>
+                    <th className="px-6 py-4 text-[11px] font-bold text-[#164174] uppercase tracking-widest text-right">Par Level</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 bg-white">
+                  {items.filter(item => selectedItemCategory === 'all' || item.category_id === selectedItemCategory).map(item => (
+                    <tr key={item.id} className="hover:bg-slate-50/80 transition-colors group">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-[11px] font-mono text-slate-500">{item.item_number}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-bold text-slate-900">{item.description_name}</span>
+                      </td>
+                      <td className="px-6 py-3 whitespace-nowrap text-right">
+                        <input
+                          type="number"
+                          min="0"
+                          placeholder="0"
+                          className="w-24 px-3 py-1.5 text-right bg-white border border-gray-200 rounded-lg text-sm font-black focus:ring-2 focus:ring-blue-500/50 outline-none"
+                          value={parLevels[item.id] || ''}
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            setParLevels(prev => {
+                              const next = { ...prev };
+                              if (!val || parseInt(val) === 0) {
+                                delete next[item.id];
+                              } else {
+                                next[item.id] = val;
+                              }
+                              return next;
+                            });
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                  {items.length === 0 && (
+                     <tr>
+                       <td colSpan={3} className="text-center p-8 text-slate-400 text-sm font-medium">Loading items...</td>
+                     </tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="p-6 border-t border-gray-100 flex justify-between items-center bg-white">
+              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                {Object.keys(parLevels).length} items configured
+              </span>
+              <div className="flex gap-3">
+                <button type="button" onClick={() => setShowParModal(false)} className="px-6 py-2.5 font-bold text-slate-500 rounded-lg hover:bg-gray-50 transition uppercase text-[10px] tracking-widest">
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleSaveParLevels}
+                  disabled={isSavingPars} 
+                  className="px-8 py-2.5 bg-blue-600 text-white font-black rounded-lg hover:bg-blue-700 shadow-lg shadow-blue-100 transition disabled:opacity-50 uppercase text-[10px] tracking-widest flex items-center gap-2"
+                >
+                  {isSavingPars ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Target className="w-4 h-4" />}
+                  {isSavingPars ? 'Saving...' : 'Save Par Levels'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
